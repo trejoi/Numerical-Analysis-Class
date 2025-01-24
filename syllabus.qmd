@@ -1,0 +1,97 @@
+
+---
+title: "Sílabus de Análisis Numérico I, Semestre 2025-2"
+subtitle: "Curso, Centro de Ciencias Matemáticas (CCM-UNAM)"
+author: "Profesora: Imelda Trejo Lorenzo"
+email: "imelda@matmore.unam.mx"
+date: "Enero-24-2025"
+output: html_document
+---
+
+# Información General
+- **Horario de clases:** lunes y miércoles, 9:00-11:15 am. (Salón 3)"
+
+- **Horario de oficina** jueves 9-11:00 am. (oficina 131)    
+
+- **Temario oficial:** <iframe src="UNAM_Temario_Analisis_Numerico_I.pdf" width="100%" height="600px"></iframe>
+
+# Objetivos del Curso
+- Entender la teoría y métodos clásica del Análisis Numérico.
+- Aplicar algoritmos para resolver problemas matemáticos.
+- Desarrollar habilidades de trabajo en equipo y multidiciplinario.
+- Al termino del semestre el estudiante estará capacitado para el correspondiente examen básico
+
+# Evaluación
+
+- **70%:** Tareas 
+- **10%:** 1er examen  
+- **20%:** 2do examen:  
+
+## Tareas
+
+Las tareas son semanales y pueden ser teóricas o aplicadas. **Entregar cada miércoles antes de iniciar clase** con:
+
+- Fecha
+
+- Nombre completo
+
+- Número de tarea
+
+- [Link de tareas](#).
+
+### **Tareas Teóricas**
+Estas pueden ser entregadas:
+- Escritas a mano
+- En formato PDF.
+
+### **Tareas Aplicadas**
+Implementación de métodos (por lo menos **Splines** y **SVD**) en un lenguaje de programación (opcional). La implementación y el lenguaje no son importantes; lo importante es que el alumno entienda el funcionamiento del código.
+
+**Entrega:**
+- Archivo en PDF que incluya:
+
+  - Imagen del código.
+
+  - Impresión de pantalla (para verificar que cumpla con la rúbrica de visualización).
+
+  - Comentarios sobre qué hace el código y cómo funciona.
+
+**Rúbrica de visualización:**
+- En la salida del programa se debe apreciar:
+
+  - Número de iteraciones.
+
+  - Tolerancia.
+
+  - Curva exacta y numérica.
+
+# Exámenes
+
+- **1er examen:** Primer parcial, cubrirá los temas (del 1 al 4).  
+- **2do examen:** Examen global.
+
+**Formato:**
+
+- **Problemas de aplicación**
+  - Ejemplo: 
+  
+  Aplicar el método de Newton a la función $f(x)=x^3-2x^2+8x-1$ en el intervalo $(-3, 3)$ 
+  con tolerancia de $10^{-3}$ y $x_0 = 0.0001$.
+
+- **Ejercicios teóricos**
+  - Ejemplo: 
+  
+  Demuestra que el método de Newton no converge para la función $f(x)=x^3-2x^2+8x-1$ tomando 
+  a $x_0$ en el intervalo $(3, 4)$.
+
+# Bibliografía
+
+## Principal
+1. *Análisis Numérico*, Richard L. Burden y J. Douglas Faires, Séptima Edición, 2002.
+Un elnace Libro remoto, sin sección de tareas, verificar derechos de autor, quiza puede ser útil.
+- [Links](https://heavyphysicsblog.wordpress.com/wp-content/uploads/2019/06/analisis-numerico-burden-faires-10ed.pdf)
+
+2. *Numerical Analysis: Mathematics of Scientific Computing*, David Kincaid and Ward Cheney, 1990.
+
+## Complementaria
+1. Métodos numéricos con matlab 3a. ed. John H. Mathews-Kurtis D. Fink

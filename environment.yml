@@ -1,0 +1,19 @@
+name: quarto-conda
+channels:
+  - conda-forge
+  - nodefaults
+dependencies:
+  - python=3.10
+  - jupyter
+  - matplotlib
+  - numpy
+  - scikit-learn
+  - pandas
+  - r-base=4.3.3
+  - r-essentials
+  - r-rmarkdown
+  - plotly
+  - pip
+  - pip:
+      - quarto-cli
+      - tabulate
