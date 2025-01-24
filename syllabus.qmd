@@ -41,7 +41,9 @@ Las tareas son semanales y pueden ser teóricas o aplicadas. **Entregar cada mi�
 
 ### **Tareas Teóricas**
 Estas pueden ser entregadas:
+
 - Escritas a mano
+
 - En formato PDF.
 
 ### **Tareas Aplicadas**
