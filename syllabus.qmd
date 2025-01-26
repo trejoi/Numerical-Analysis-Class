@@ -11,13 +11,13 @@ output: html_document
 # Información General
 - **Horario de clases:** lunes y miércoles, 9:00-11:15 am. (Salón 3)"
 
-- **Horario de oficina** jueves 9-11:00 am. (oficina 131)    
+- **Horario de oficina** martes 3-4:00 pm. jueves 9-10:00 am. (oficina 131)    
 
 - **Temario oficial:** <iframe src="UNAM_Temario_Analisis_Numerico_I.pdf" width="100%" height="600px"></iframe>
 
 # Objetivos del Curso
 - Entender la teoría y métodos clásica del Análisis Numérico.
-- Aplicar algoritmos para resolver problemas matemáticos.
+- Aplicar algoritmos eficientes para resolver problemas matemáticos.
 - Desarrollar habilidades de trabajo en equipo y multidiciplinario.
 - Al termino del semestre el estudiante estará capacitado para el correspondiente examen básico
 
@@ -37,7 +37,7 @@ Las tareas son semanales y pueden ser teóricas o aplicadas. **Entregar cada mi�
 
 - Número de tarea
 
-- [Link de tareas](#).
+- Ver tarea en el repositorio de clase.
 
 ### **Tareas Teóricas**
 Estas pueden ser entregadas:
@@ -90,8 +90,7 @@ Implementación de métodos (por lo menos **Splines** y **SVD**) en un lenguaje 
 
 ## Principal
 1. *Análisis Numérico*, Richard L. Burden y J. Douglas Faires, Séptima Edición, 2002.
-Un elnace Libro remoto, sin sección de tareas, verificar derechos de autor, quiza puede ser útil.
-- [Links](https://heavyphysicsblog.wordpress.com/wp-content/uploads/2019/06/analisis-numerico-burden-faires-10ed.pdf)
+[Links](https://heavyphysicsblog.wordpress.com/wp-content/uploads/2019/06/analisis-numerico-burden-faires-10ed.pdf), elnace Libro remoto, sin sección de tareas, verificar derechos de autor, quiza puede ser útil.
 
 2. *Numerical Analysis: Mathematics of Scientific Computing*, David Kincaid and Ward Cheney, 1990.
 
