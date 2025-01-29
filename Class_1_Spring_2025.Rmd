@@ -1,0 +1,317 @@
+---
+title: "Analisis Numerico I, Primavera 2025"
+subtitle: "Análisis Numérico, R. L. Burden y J. D. Faires, ed. 10."
+author: "Instructor: Imelda Trejo"
+date: "Last update: 2025-01-27"
+output: 
+  html_document: 
+    toc: true
+    toc_depth: 3
+    toc_float: true
+    code_folding: hide
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, eval = TRUE)
+
+#Change `eval` to `TRUE` if you want to knit this document.
+
+```
+
+```{r}
+
+rm(list = ls())      # clear memory (removes all the variables from the workspace)
+
+```
+
+
+\newpage
+
+
+
+# 1 Preliminares
+
+La derivada de la función $f(x)$ en $c$ (si existe) se define como 
+
+$$\frac{df(c)}{dx}:=\lim_{x \to c} \frac{f(x)-f(c)}{x-c}.$$
+Si existe la derivada de $f$ en $c$ decimos que $f$ es diferenciables en $c$. También usamos la notación, $f'(c)$,$f''(c)$,...,$f^{n}(c)$ para indicar la primera, segunda, ..., $n$-esima derivada de $f$ en $c$.
+
+Denotamos con $C^n(\mathbb{R})$ el conjunto de todas las funciones cuya derivada $n$-enesima existe y es continua en todos los números reales.
+$C^\infty(\mathbb{R})$ denota el conjunto de todas la funciones infinitamente diferenciables y cuyas derivadas son continuas.
+
+Ejemplo. $f(x)=e^{x}\in C^\infty(\mathbb{R})$.
+
+Similarmente, $C^n([a,b])$ denota el conjunto de funciones cuya derivada $n$-esima existe en $(a,b)$ y es continua en $[a,b]$.
+
+
+
+
+**Teorema del Valor Medio (TVM):**
+Supongamos que $f\in C[a,b]$ y que $f'(x)$ existe para todo $x\in (a,b)$. 
+Entonces existe un nuero $c$ tal que $$f'(c)=\frac{f(b)-f(a)}{b-a}.$$
+Relacióna las pendientes de la recta tangente y secante.
+
+
+**Teorema de Rolle:** Supongamos que $f\in C[a,b]$ y que $f'(x)$ existe para todo $x\in (a,b)$. Si $f(a)=f(b)$,  
+Entonces existe un número $c$ tal que $f'(c)=0$. Util para asegurar máximos o mínimos. 
+
+**Teorema de Weierstrass:** Toda función real y continua en un compacto alcanza su máximo y mínimo.
+
+**Teorema del Valor Intermedio (TVI) o de Bolzano:** Supongamos que $f\in C[a,b]$ y que $L$ es cualquier numero entre $a$ y $b$. 
+Entonces existe un número $c$ tal que $f(c)=L$. 
+
+Util para demostrar la existencia de raices de una función. 
+
+
+## 1.1 Teorema de Taylor y el Resto 
+
+Teorema de Taylor con la fórmula de Lagrange para el resto.
+
+**Teorema 1**  Si $f\in C^n[a,b]$ y si $f^{n+1}(x)$ existe para todo $x\in (a,b)$. Entonces para cualesquier puntos $c$ y $x$ en $[a,b]$,  
+existe un punto $\xi$ entre $c$ y $x$ tal que:
+$$f(x)= \sum^{n}_{k=0}\frac{1}{k!} f^{(k)}(c)\left(x-c\right)^k+R_{n}(x)$$
+donde, $$E_n(x)=\frac{1}{(n+1)!}f^{(n+1)}(\xi)(x-c)^{n+1}.$$
+
+Una función 'suficientemente' suave puede ser apróximada por un polinomio.
+
+**Ejemplo:** Compute the Taylor series of $f(x)=ln(x)$ where $a=1$, $b=2$ and $c=1$. Then compute $ln(2)$.
+
+Escribir la serie en el pizarron.
+
+El Polinomio de Taylor de grado cinco para $f(x)=ln(x)$ al rededor de 1 es: 
+$$P_5(x)=(x-1)-\frac{1}{2}(x-1)^2+\frac{1}{3}(x-1)^3-\frac{1}{4}(x-1)^4+\frac{1}{5}(x-1)^5$$
+
+```{r}
+x  <- seq(0.3, 2, 0.05)
+f <- log(x)
+P <- (x-1)-(x-1)**2/2+(x-1)^3/3-(x-1)^4/4+(x-1)^5/5
+plot(x,f,type="l",col="green")
+lines(x,P,col="orange")
+legend("topleft", inset=.05, title="Polynomial approximation",
+  c("f","P"), fill=terrain.colors(3), horiz=TRUE)
+```
+Nota: la estimación es local.
+
+Calcular $\ln(2)$.
+$$ln(2)= 1-\frac{1}{2}+\frac{1}{3}-\frac{1}{4}+...+\frac{(-1)^n}{n}+R_n(2).
+$$
+Entonces para calcular $\ln(2)$ con una **precisión** de $10^8$, requerimos que el resto
+$$|R_n(2)|\leq \frac{1}{n+1}\leq 10^{-8}.$$
+Es decir requerimos usar más de 100 millones ($n\geq 10^8$) de términos de la serie de Taylor para obtener dicha precisión. 
+Cuando codifiquemos tener cuidado con las tolerancias, ver páginas 36 del archivo pdf, **Sección 1.3 Algoritmos y convergencia.** 
+
+Ejercicios: Calcular la serie de Taylor para $e^x$, $\cos(x)$, $\frac{1}{x-1}$ alrededor de $x_0=0$. Escribe los correspondientes polinomios de Taylor y restos de grado $n$.
+
+
+
+## 1.3 Orden de convergencia
+Velocidad de convergencia de sucesiones y límites.
+
+### 1.3.1 Motivación: 
+Para las siguientes series convergentes, calcular los primeros 10 términos de la sucesión.
+
+(a)
+
+$$e=\lim_{n\to\infty} \large(1+\frac{1}{n}\large)^{n}\approx 2.71828182845905$$
+
+```{r}
+for (n in 1:10) {
+  if(n%%1==0){
+    print((1+1/n)^n)
+  }
+}
+```
+(b) Sea $x_1=2$, y 
+$$x_{n+1}=\frac{1}{2}x_n+\frac{1}{x_n}.$$ Entonces $$\lim_{n\to\infty}{x_n}=\sqrt{2}\approx 1.41421356.$$
+
+```{r}
+recursiva <- function (x) {
+  r=x/2+1/x
+  return(r)
+}
+
+xnew<-2
+for (n in 1:10) {
+  print(round(xnew, digits = 10))
+  #print(xnew)
+  xnew=recursiva(xnew)
+} 
+
+```
+
+El segundo ejemplo converge más rápido a su límite. Para darnos una idea sobre la rapidez de convergencia en sucesiones y límites usaremos la notación de O grande y o pequeña.
+
+
+### 1.3.2 Natación O grande y o pequeña (tasas de convergencia).
+
+**Pagina 40 del archivo pdf digital** 
+
+Definición 1.18.
+
+Sea $\{x_n\}$ una sucesión que converge a $x$ y sea $\{y_n\}$ una sucesión que converge a cero. Se dice que $\{x_n\}$ tiene un orden de convergencia $O(y_n)$ si existe una constante $K>0$ y un real $r$ tal que
+$$|x_n-x|\leq K|y_n|$$
+para todo $n>r$. Se escribe $x_n=x+O(y_n)$.
+
+\
+
+\
+
+Sea $\lim_{x\to 0}f(x)=L$ y $\lim_{x\to 0}g(x)=0$. Diremos que el orden de convergencia del limite es $O(g(x))$ si existe una constante $K>0$ tal que 
+$$|f(x)-L|\leq K |g(x)|$$ para $x$ sufucientemente pequeño.
+Se escribe $f(x)=L+O(g(x))$.
+
+Ver ejemplos 2 y 3 del libro. $$\cos(h) +\frac{2}{h^2} = 1 + O(h^4).$$
+
+
+Ejemplo 4. Hallar el orden del límite 
+$$\lim_{h \to 0} \frac{\sin (h)}{h}=1.$$
+Solución: El orden del límite es $O(h^2)$.
+
+
+Escribimos $x_n=o(y_n)$ si $y_n\neq0$ y $$\lim_{n\to\infty}\frac{x_n}{y_n}=0,$$
+es decir $y_n$ convege más rápido que $x_n$.
+
+Ejemplo. $\frac{1}{n\ln(n)}=o(1/n)$.
+
+
+
+
+## 1.2 Medidas del error, error de redondeo, y aritmética de una computadora.
+
+
+Ver p'agina 25:
+https://heavyphysicsblog.wordpress.com/wp-content/uploads/2019/06/analisis-numerico-burden-faires-10ed.pdf
+
+
+Los *métodos numéricos* son una serie de instrucciones o algoritmos matemáticos diseñados para obtener **aproximaciones** a valores, especialmente cuando las soluciones exactas no son posibles o son difíciles de calcular. El **análisis numérico** es la base teórica de los métodos numéricos.
+
+El **error**, diferencia entre el valor numérico aproximado y el valor exácto, en los métodos numéricos puede surgir por el manejo finito de memoria de una computadora, errores de redondeo y truncamiento, por el modelo usado al resolver un problemas (modelo aproximar una inegral con una suma finita, aproximar el límite de una sucesión con un numero finito de iteraciones), ver
+https://chatgpt.com/c/67996035-0e50-8004-ade2-3fa56665434f
+
+### Características principales del análisis numérico:
+
+-	**Estudio de errores:** Analiza la precisión de los métodos y cuantifica los errores involucrados en las aproximaciones, diferenciando entre errores de truncamiento y de redondeo.
+-	**Estabilidad:** Evalúa como los errores se *propagan* durante los cálculos y si afectan significativamente el resultado final.
+-	**Convergencia:** Determina si las soluciones aproximadas generadas por un método *se acercan a la solución exacta* conforme se incrementa el número de iteraciones o se refina el proceso.
+-	**Eficiencia:** Busca *optimizar* el costo computacional y el *tiempo* requerido para encontrar una solución, garantizando un balance entre precisión y recursos.
+
+
+### 1.2.1 Aritmética de una computadora 
+
+#### Motivaci'on:
+
+a. ¿Quién es mayor 9.9 o 9.11?
+
+b. ¿Cuál es el resultado de la resta 9.11 menos 9.9?
+
+c. Hacer las mismas preguntas a Chatgpt.
+
+<https://chatgpt.com/c/677c9cac-0fec-8004-a7a8-14f4f01574c2>
+
+d. Realizar la resta en python? o pedir a chatgpt que use python
+
+
+e. ¿Por qué hay imprecisión en python y en algunos otros programas de programación? C'omo chatgpt hizo la comparaci'on?
+
+
+```{r}
+
+9.11-9.9
+
+```
+
+
+### Manejo finito de memoria. 
+
+El sistema numérico que emplea la computadora es el sistema de **número punto flotante**.
+
+
+<https://chatgpt.com/c/677b33ff-0da4-8004-9873-a084bc3ab284>
+
+La forma general de un número en punto flotante es:
+
+$$N'umero = Signo×Mantisa×Base^{Exponente}$$
+Normalmente la base es 10 o 2 (notación cient'ifica o binaria).
+
+
+Ejemplo (Notación cient'ifica)
+
+$732.5051=0.7325051\times10^3$
+
+$-0.005612=-0.5612\times10^{-2}$
+
+
+En general, 
+
+$$x=\pm r \times 10^n$$
+
+donde $r$ es numero entre $\frac{1}{10}\leq r<1$. Si $x=0$, entonces $r=0$. Entodos los otros casos podemos ajustar $n$ en el rango de $r$ dado.
+
+Ejemplo (Notación binaria)
+
+$$x=\pm q \times 2^n$$ donde $\frac{1}{2}\leq q<1$.
+
+en ambos casos $r$ y $q$ es la **mantisa**.
+
+
+Denotemos con $fl(x)$  la función punto flotante, esto es para todo real $x$:
+$$fl(x)=0.c_1c_2c_3...c_k Base^n$$ 
+donde $n$, el exponete, es un entero (positivo, negativo, o zero). 
+
+Nota: la funci'on $fl(x)$ termina la mantisa de $x$
+en los $k$ dígitos, decimales o binarios. Existen dos maneras comunes para realizar esta terminación: **redondeo** o **truncamiento**.
+
+Ejemplo, el n'umero punto flotante de $1/3$ con cuatro d'igitos decimales usando truncamiento o redondeo es,
+
+$$fl(\frac{1}{3})=0.3333$$.
+
+### Representacion en la computadora.
+
+En computación, los números en punto flotante suelen representarse utilizando estándares como el *IEEE 754*, que define la aritm'etica binaria y reglas para manejar operaciones. 
+Por ejemplo: Un número de 32 bits (punto flotante simple precisión) se divide en:
+
+        1 bit para el signo.
+        8 bits para el exponente.
+        23 bits para la mantisa.
+    
+Un número de 64 bits (doble precisión) utiliza más bits para mayor precisión, ver libro.
+
+En ambos casos, 32 o 64 bits, la mantisa y exponente son finitos, por lo tanto las operaciones, aritm'etica en las computadoras, se efectuan usando la funci'on punto flontante $fl(x)$. 
+
+Nota: N'umeros muy pequenos o muy grandes tampoco pueden ser representados (underflow and overflow, ver libro).
+
+*ver el libro; la aritm'etica de las computadoras, es decir la aritm'etica usando la funci'on $fl(x)$.*
+
+
+### 1.2.2 Teoría de errores
+
+
+Se pueden medir por ejemplo con el error absoluto y relativo.
+
+Supongamos que $p$ aproxima a $p^*$, $p \approx p^*$. 
+
+El error absoluto es: $$|p-p^*|$$
+
+El error relativo es: $$\frac{|p-p^*|}{|p|}, $$ $p\neq 0$.
+
+
+Las medidas de error se usan para evaluar y cuantificar la **precisión** de los métodos numéricos. 
+Una menor magnitud de error (se recomienda usar el error relativo) implica un método más preciso y confiable.
+
+
+Conceptos de medidas de error, tolerancia y precisión, métodos numéricos estables, métodos numéricos bien y mal condicionados.
+
+ver: https://chatgpt.com/c/679954af-69d0-8004-91d5-767c4955fdfa
+
+
+
+
+Numero de digitos significativos
+
+
+
+```{r}
+
+
+```
