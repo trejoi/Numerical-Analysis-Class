@@ -1,0 +1,243 @@
+---
+title: "Análisis Numérico I, Primavera 2025"
+subtitle: "Análisis Numérico, R. L. Burden y J. D. Faires, ed. 10."
+author: "Instructor: Imelda Trejo"
+date: "Last update: 2025-01-27"
+output: 
+  html_document: 
+    toc: true
+    toc_depth: 3
+    toc_float: true
+    code_folding: hide
+
+---
+
+## 1.2 Medidas del error, error de redondeo, y aritmética de una computadora.
+
+
+Ver página 25:
+https://heavyphysicsblog.wordpress.com/wp-content/uploads/2019/06/analisis-numerico-burden-faires-10ed.pdf
+
+
+Los *métodos numéricos* son una serie de instrucciones o algoritmos matemáticos diseñados para obtener **aproximaciones** a valores, especialmente cuando las soluciones exactas no son posibles o son difíciles de calcular. El **análisis numérico** es la base teórica de los métodos numéricos.
+
+El **error**, diferencia entre el valor numérico aproximado y el valor exácto, en los métodos numéricos puede surgir por el manejo finito de memoria de una computadora, errores de redondeo y truncamiento, por el modelo usado al resolver un problemas (modelo aproximar una inegral con una suma finita, aproximar el límite de una sucesión con un número finito de iteraciones), ver
+https://chatgpt.com/c/67996035-0e50-8004-ade2-3fa56665434f
+
+### Características principales del análisis numérico:
+
+-	**Estudio de errores:** Analiza la precisión de los métodos y cuantifica los errores involucrados en las aproximaciones, diferenciando entre errores de truncamiento y de redondeo.
+-	**Estabilidad:** Evalúa como los errores se *propagan* durante los cálculos y si afectan significativamente el resultado final.
+-	**Convergencia:** Determina si las soluciones aproximadas generadas por un método *se acercan a la solución exacta* conforme se incrementa el número de iteraciones o se refina el proceso.
+-	**Eficiencia:** Busca *optimizar* el costo computacional y el *tiempo* requerido para encontrar una solución, garantizando un balance entre precisión y recursos.
+
+
+### 1.2.1 Aritmética de una computadora 
+
+#### Motivación:
+
+a. ¿Quién es mayor 9.9 o 9.11?
+
+b. ¿Cuál es el resultado de la resta 9.11 menos 9.9?
+
+c. Hacer las mismas preguntas a Chatgpt.
+
+<https://chatgpt.com/c/677c9cac-0fec-8004-a7a8-14f4f01574c2>
+
+d. Realizar la resta en python? o pedir a chatgpt que use python
+
+
+e. ¿Por qué hay imprecisión en python y en algunos otros programas de programación? Cómo chatgpt hizo la comparación?
+
+
+```{r}
+
+9.11-9.9
+
+```
+
+
+### Manejo finito de memoria. 
+
+El sistema numérico que emplea la computadora es el sistema de **número punto flotante**.
+
+
+<https://chatgpt.com/c/677b33ff-0da4-8004-9873-a084bc3ab284>
+
+La forma general de un número en punto flotante es:
+
+$$Número = Signo\times Mantisa \times Base^{Exponente}$$
+Normalmente la base es 10 o 2 (notación científica o binaria).
+
+
+Ejemplo (Notación científica)
+
+$732.5051=0.7325051\times10^3$
+
+$-0.005612=-0.5612\times10^{-2}$
+
+
+En general, 
+
+$$x=\pm r \times 10^n$$
+
+donde $r$ es un número entre $\frac{1}{10}\leq r<1$. Si $x=0$, entonces $r=0$. Entodos los otros casos podemos ajustar $n$ en el rango de $r$ dado.
+
+Ejemplo (Notación binaria)
+
+$$x=\pm q \times 2^n$$ donde $\frac{1}{2}\leq q<1$.
+
+en ambos casos $r$ y $q$ es la **mantisa**.
+
+
+Denotemos con $fl(x)$  la **función punto flotante**, esto es para todo real $x$:
+$$fl(x)=0.c_1c_2c_3...c_k Base^n$$ 
+donde $n$, el exponete, es un entero (positivo, negativo, o zero). 
+
+Nota: la función $fl(x)$ termina la mantisa de $x$
+en los $k$ dígitos, decimales o binarios. Existen dos maneras comunes para realizar esta terminación: **redondeo** o **truncamiento (corte)**.
+
+Ejemplo, el número punto flotante de $1/3$ con cuatro dígitos decimales usando truncamiento o redondeo es,
+
+$$fl(\frac{1}{3})=0.3333.$$
+Así, $$\frac{1}{3}\approx fl(x)$$ y en el lenguaje computacional trabajamos con un número de cifras finita.
+
+### Representación en la computadora.
+
+En computación, los números en punto flotante suelen representarse utilizando estándares como el *IEEE 754*, que define la aritm'etica binaria y reglas para manejar operaciones. 
+Por ejemplo: Un número de 32 bits (punto flotante simple precisión) se divide en:
+
+        1 bit para el signo.
+        8 bits para el exponente.
+        23 bits para la mantisa.
+    
+Un número de 64 bits (doble precisión) utiliza más bits para mayor precisión, ver libro.
+
+En ambos casos, 32 o 64 bits, la mantisa y exponente son finitos, por lo tanto las operaciones, aritm'etica en las computadoras, se efectuan usando la funci'on punto flontante $fl(x)$. 
+
+Nota: Números muy pequeños o muy grandes tampoco pueden ser representados (subdesbordamiento and desbordamiento, ver libro).
+
+
+*ver el libro; la aritmética de las computadoras, es decir la aritmética usando la función $fl(x)$.*
+
+
+
+
+
+
+### 1.2.2 Teoría de errores
+
+
+Los errores se pueden medir por ejemplo con el error absoluto y relativo.
+
+Supongamos que $p$ aproxima a $p^*$, $p \approx p^*$. 
+
+El error absoluto es: $$|p-p^*|$$
+
+El error relativo es: $$\frac{|p-p^*|}{|p|}, $$ $p\neq 0$.
+
+
+Las medidas de error se usan para evaluar y cuantificar la **precisión** de los métodos numéricos. 
+Una menor magnitud de error (se recomienda usar el error relativo) implica un método más preciso y confiable.
+
+
+** Número de digitos significativos**
+
+ $p \approx p^*$ con $t$ cifras significativas si $t$ es el mayor entero no negativo para el cual  para le cual 
+ $$\frac{|p-p^*|}{|p|}<5\times 10^{-t}$$
+
+
+### 1.2.3 Inestabilidad numérica, condición
+
+Conceptos de medidas de error, tolerancia y precisión, métodos numéricos estables, métodos numéricos bien y mal condicionados.
+
+ver: https://chatgpt.com/c/679954af-69d0-8004-91d5-767c4955fdfa
+
+ver libro: pagina 38, Definición 1.17  
+
+https://heavyphysicsblog.wordpress.com/wp-content/uploads/2019/06/analisis-numerico-burden-faires-10ed.pdf
+
+Un processo númerico es **inestable** si errores pequeños hechos en algún estado del proceso estos errores son magnificados en estados subsecuentes del processo, y pone en peligro la exactitud de los cálculos. 
+
+Ejemplo: considere e implemente numéricamente la siguiente relación de recurrencia:
+
+$$\begin{equation}
+\left\lbrace
+\begin{array}{ll}
+x_0=1, \quad x_1=\frac{1}{3}\\
+x_{n+1}=\frac{13}{3}x_n-\frac{4}{3}x_{n-1}, & n\geq 1.
+\end{array}
+\right.
+\end{equation}$$
+Usa inducción matemática para demostrar que esta relación de recurrencia genera la siguientes sucesión,
+$$x_n=\left(\frac{1}{3}\right)^n.$$ sucesión que cnverge a zero cuando $n$ tiende a infinito.
+
+```{r}
+recursiva2 <- function (x,y) {
+  #x=xn
+  r=13*x/3-4*y/3
+  return(r)
+}
+
+xold <-1
+xnew <-1/3
+
+print(round(xold, digits = 7))
+print(xnew)
+for (n in 1:35) {
+  aux=recursiva2(xnew,xold)
+  xold=xnew
+  xnew=aux
+  print(round(aux, digits = 7))
+} 
+
+
+```
+Este es un ejemplo de algoritmo inestable.
+
+ver libro. Crecimiento del error lineal vs exponencial.
+
+### 1.2.3 Condición
+
+La palabra **condición** en los métodos numéricos se usa para indicar que tan sensibles son la soluciones de un problema bajo pequeñas perurbaciones en los datos de entrada. 
+Un problema se dice **bien condicionado** si pequeños cambios en los datos de entada proboca pequeños cambios en los datos de salida. 
+En caso contrrio se dice que el problema es **mal condicionado**, pequeña variación en los datos de entrada provoca grandes cambios en los resultados.
+
+
+Para ciertos problemas se puede definir un numero llamado **número de condición**. Si este numero es grande se indica que el problema es mal condicionado.
+
+
+Ejemplo. (Pag 51 del segundo libro) Problema: evaluar una funcion $f$ en $x$. Usando el error relativo. Al perturbar $x$ con $h$, los errores son $h/x=|x+h-x|/x$ y para $f$ es
+
+$$\frac{f(x+h)-f(x)}{f(x)}\approx \frac{h f'(x)}{f(x)}=\left(\frac{x f'(x)}{f(x)}\right)\left(\frac{h}{x}\right)$$
+el factor, $\left(\frac{x f'(x)}{f(x)}\right)$ sirve como un número condición. 
+
+
+
+
+
+Ejemplos. En  las siguientes clases definiremos el **numéro de condicion** para una matrix.
+
+
+
+### 1.2.4 Problemas bien y mal planteados.
+
+
+Un problema es **bien planteado (well-posed)** si cumple con los siguientes tres criterios establecidos por Hadamard:
+
+1. **Existencia:** El problema tiene al menos una solución.
+
+2. **Unicidad:** La solución es única.
+
+3. **Dependencia continua de los datos:** Pequeños cambios en los datos de entrada producen pequeños cambios en la solución.
+
+Si un problema no cumple alguna de estas condiciones, se dice que es **mal planteado (ill-posed)**. 
+
+En la práctica, los problemas mal planteados pueden ser difíciles de resolver numéricamente porque pueden amplificar errores o ser inestables.
+
+*Relación con los métodos numéricos:*
+
+Los métodos numéricos funcionan mejor cuando el problema es bien planteado, ya que garantizan soluciones confiables y estables.
+Si un problema es mal planteado, pueden ser necesarias técnicas como la regularización para mejorar la estabilidad de la solución.
+Por ejemplo, en sistemas de ecuaciones lineales, si la matriz del sistema tiene un **número de condición** muy alto, el problema puede ser mal condicionado, lo que lo hace difícil de resolver de manera precisa con métodos numéricos.
+
