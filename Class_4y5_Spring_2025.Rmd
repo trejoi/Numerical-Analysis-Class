@@ -1,0 +1,202 @@
+---
+title: "Análisis Numérico I, Primavera 2025"
+subtitle: "Análisis Numérico, R. L. Burden y J. D. Faires, ed. 10."
+author: "Instructor: Imelda Trejo"
+date: "Last update: 2025-Febrero-10"
+output: 
+  html_document: 
+    toc: true
+    toc_depth: 3
+    toc_float: true
+    code_folding: hide
+
+---
+
+
+
+# 2 Solución de ecuaciones de una varibale
+
+En este capítulo estudiaremos algunos método numéricos para encontrar raices (ceros) de funciones reales.
+
+## 2.1 El método de la bisección o Bolzano
+
+
+Sea $f(x)\in C([a,b])$ con $f(a)f(b)<0$, por el TVI, existe $p\in [a,b]$ tal que $f(p)=0$. A pesar de que el procedimiento operará cuando haya más de una raíz en el intervalo $(a, b)$, por simplicidad, nosotros asumimos que la raíz en este intervalo es única.
+
+
+El método de la bisección consiste en dividir repetidamente a la mitad los subintervalos de $[a,b]$ de manera que cada subintervalo contiene a $p$. 
+Ver algoritmo en el libro, página 49:
+https://heavyphysicsblog.wordpress.com/wp-content/uploads/2019/06/analisis-numerico-burden-faires-10ed.pdf
+
+¿Por qué necesitamos una tolerancia o definir N el máximo de iteraciones en el speudo-algoritmo?
+
+
+
+**Teorema 2.1** Suponga que $f \in C([a,b])$ y $f(a)f(b)<0$. El método de bisección genera una sucesión 
+$\{p_n\}=\{(a_n+b_n)/2\}$ que aproxima a la raíz $p$ de $f$ con la propiedad
+$$|p_n-p|\leq \frac{b-a}{2^n}, n\geq 1,$$
+es decir la rapidez de convergencia de $p_n$ a $p$ es $O(\frac{1}{2^n})$, i.e, $$p_n=p+O(\frac{1}{2^n}).$$
+
+**Prueba:** Para  $n\geq 1$, por inducción matemática, es fácil demostrar que 
+$$|b_n-a_n|\leq \frac{|b-a|}{2^{n-1}}.$$
+Para $n\geq 1$, si $p\in (a_n,p_n)$, entonces $|p-p_n|\leq|a_n-p_n|=|b_n-a_n|/2$. Similarmente, 
+si $p\in (p_n,b_n)$, entonces $|p-p_n|\leq|b_n-p_n|=|b_n-a_n|/2$. La última desiguladad se tiene al usar la definición de $p_n=(a_n+b_n)/2$.
+Por lo tanto, para $n\geq 1$, 
+$$|p-p_n|\leq \frac{|b_n-a_n|}{2},$$
+así, usando las desigualdades anteriores, tenemos
+$$|p-p_n|\leq \frac{|b_n-a_n|}{2}\leq  \frac{b-a}{2^n},$$
+que es lo que queriamos demostrar.
+
+**ver Ejercico 2, comentarios de los signos, y potenciales fallas del método**.
+
+Obseraciones del método:
+
+**Ventajas:**
+
+- *Siempre converge* si la función es continua y el intervalo inicial está bien elegido (se recominda iniciar con un intervalo pequeño).
+
+- Es simple e intuitivo de implementar.
+
+- Este método es muy utilizado en cálculo numérico cuando se necesita encontrar raíces de ecuaciones de manera confiable.
+
+- Se utiliza como indicador para método más eficientes.
+
+**Desventajas:**
+
+- Converge lentamente en comparación con otros métodos (como Newton-Raphson).
+
+- Solo funciona si se garantiza un cambio de signo en el intervalo inicial.
+
+## 2.2 El método del punto fijo
+
+Sea $g\in C([a,b])$. Un punto fijo para $g$ es un punto $p\in[a,b]$ tal que $$g(p)=p.$$
+
+El problema de encontrar raices de una función $f$ puede estudiarse como el problema de encontrar puntos fijos y viceversa.
+
+$$f(p)=0 \implies f(p)+p=p \implies g(p)=p, \quad \text{con} \quad g(x)=f(x)+x.$$
+$$g(p)=p \implies g(p)-p=0 \implies f(p)=0, \quad \text{con} \quad f(x)=g(x)-x.$$
+**Teorema del punto fijo:**
+
+(a) Si $g(x)\in C([a,b])$ y $g(x)\in[a,b]$ para todo $x\in[a,b]$. Entonces $g$ tiene un punto fijo en $[a,b]$.
+
+(b) Si además $g$ es diferenciable y existe una contante positiva $k$ tal que
+$$|g'(x)|\leq k< 1, \forall x\in[a,b].$$
+Entonces el punto fijo es único.
+
+Demostración (pizarron).
+
+**Iteración de punto fijo**
+
+Para aproximar el punto fijo de una función $g\in C([a,b])$, elegimos una aproximación inicial $x_0$ y 
+generamos la sucesión $\{x_n\}$  como 
+
+
+\begin{equation}
+\tag{2}
+x_n=g(x_{n−1}), \quad \text{para cada todo} \quad n\geq 1.
+\end{equation}
+
+Ver detallle en el libro (descripción geométrica y ejemplos)
+https://heavyphysicsblog.wordpress.com/wp-content/uploads/2019/06/analisis-numerico-burden-faires-10ed.pdf
+
+**Teorema 2.4 (convegencia del método del punto fijo)**
+
+Supngamos que $g$ verifica las hipótesis del teorema del punto fijo en $[a,b]$. Sea $x$ el único punto fijo de $g$ en $[a,b]$. Entonces la sucesipon $\{x_n\}$,
+$$x_n=g(x_{n−1}), \forall n\geq 1$$
+converge a $x$.
+
+Demostración (pizarrron): La demostración se sigue de la siguiente desigualdad,
+$$|x_n-x|\leq k^n |x_0-x|, \forall n\geq 1.$$
+Note que la rapidez de convergencia de la sucesión $x_n$ generada por el método del punto fijo es $O(k^n)$, i.e,
+$$x_n=x+O(k^n), \quad k<1.$$
+
+Corolario,
+
+$$|x_n-x|\leq \frac{k^n}{1-k}|x_1-x_0|.$$
+
+**Ventajas**
+
+- *Fácil de implementar:* Su algoritmo es sencillo y requiere solo iteraciones sucesivas.
+- *Menos costoso computacionalmente:* En términos de operaciones, puede ser más eficiente que otros métodos como Newton-Raphson, ya que evita derivadas.
+- *Puede ser útil cuando otros métodos fallan:* En algunos casos, el método de Newton puede no converger debido a problemas con la derivada, mientras que el de punto fijo sí.
+
+**Desventajas**
+
+- Depende de la elección de $g(x)$: No todas las transformaciones $x=g(x)$ garantizan la convergencia. 
+
+- Puede ser lento: La convergencia suele ser lineal, lo que significa que puede tomar muchas iteraciones para obtener una buena aproximación (se verá en siguientes clases).
+
+Al implementar el método, cuando la función $g$ falle en algunas de las hipótesis del teorema, se recomienda usar un intervalo más pequeño o proponer otra función.
+
+
+
+## 2.3 El método de Newton (Newton-Raphson)
+
+**iteraciónes del método**
+
+Sea $f\in C^2([a,b])$, las iteraciónes del método de Newton para $x_0$ en $[a,b]$ se define como
+
+\begin{equation}
+\tag{3}
+x_n=x_{n-1}-\frac{f(x_{n-1})}{f'(x_{n-1})}, \forall n\geq 1.
+\end{equation}
+
+Siempre, que $f'(x_{n-1})\neq 0$.
+
+Observe, que las iteraciones del método de Newton son iteraciones del método del punto fijo para la función
+$$g(x)=x-\frac{f(x)}{f'(x)}.$$
+Por lo tanto, ambos métodos tienen una rapidez de convergencia igual.
+
+**Teorema de convergencia (La suceción generada por el método de Newton converge a una raíz de $f(x)$).**
+
+Sea $f\in C^2([a,b])$. Si $x\in(a,b)$ es tal que $f(x)=0$, $f'(x)\neq 0$, entonces existe $\delta>0$ tal que el método de Newton genera una sucesión 
+$\{x_n\}$ tal que $x_n$ converge a $x$ para cualquier punto inical $x_0$ en $[x-\delta,x+\delta]$ 
+
+
+Dempostración: por demostrar que exite $\delta>0$ tal que
+$$g(x)=x-\frac{f(x)}{f'(x)}$$ es una función que satisface el teorema del punto fijo en $[x-\delta,x+\delta]$.
+
+(ver detalles en el libro página 66 del pdf. https://heavyphysicsblog.wordpress.com/wp-content/uploads/2019/06/analisis-numerico-burden-faires-10ed.pdf)
+
+
+**Ventajas**
+
+- Rápida convergencia con una precisión alta en pocas iteraciones (lo demostraremos en la siguiente clase).
+
+
+**Desventajas**
+
+- El método no funciona cuando $f'(x)=0$.
+
+- Elegir un buen intervalo de partida y $x_0$.
+
+
+
+## 2.4 El método de la secante 
+
+El objetivo del método de la secante es eliminar en el algoritmo de Newton calcular la derivada. Aproximando la derivada como
+$$f(x_0)\approx \frac{f(x_1)-f(x_0)}{x_1-x_0}$$
+para $x_1$ cerca de $x_0$.
+
+Así, de la iteraciones del método de Newton:
+
+$$x_n=x_{n-1}-\frac{f(x_{n-1})}{f'(x_{n-1})}\approx x_{n-1}-\frac{f(x_{n-1})}{\frac{f(x_{n-1})-f(x_{n-2})}{x_{n-1}-x_{n-2}}}$$
+para $x_{n-1}$ y $x_{n-2}$ suficientemente cerca.
+
+Las **iteraciones del método de la secante** para $x_0$ y $x_1$ en $[a,b]$ y $f\in C([a,b])$ es
+
+\begin{equation}
+\tag{4}
+x_n=x_{n-1}-\frac{(x_{n-1}-x_{n-2})f(x_{n-1})}{f(x_{n-1})-f(x_{n-2})}, \forall n\geq 2,
+\end{equation}
+
+siempre que el cociente este bien definido.
+
+**Ventajas**
+
+- Se elimina calcular la deriva.
+
+
+Hacer ejercicios varios.
+
+
