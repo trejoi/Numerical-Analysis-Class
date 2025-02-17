@@ -24,7 +24,7 @@ https://trejoi.github.io/Numerical-Analysis-Class/Class_4y5_Spring_2025.html
 
 Draft of the Material class #6
 
-https://trejoi.github.io/Numerical-Analysis-Class/Class_6.html
+https://trejoi.github.io/Numerical-Analysis-Class/Class_6_Spring_2025.html
 
 
 
