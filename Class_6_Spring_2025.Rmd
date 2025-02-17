@@ -1,0 +1,228 @@
+---
+title: "Análisis Numérico I, Primavera 2025"
+subtitle: "Análisis Numérico, R. L. Burden y J. D. Faires, ed. 10."
+author: "Instructor: Imelda Trejo"
+date: "Last update: 2025-Febrero-16"
+output: 
+  html_document: 
+    toc: true
+    toc_depth: 3
+    toc_float: true
+    code_folding: hide
+
+---
+# 3 Algebra lineal numérica 
+
+Un sistema con coeficientes reales de $n$ incognitas y $n$ ecuaciones:
+
+\begin{align*}
+  f_1(x_1,x_2,...,x_n)&=0\\
+  f_2(x_1,x_2,...,x_n)&=0\\
+   &\vdots\\
+ f_n(x_1,x_2,...,x_n) &=0
+\end{align*}
+
+es lineal si 
+$$f_i(x_1,x_2,...,x_n)=a_{i1}x_1+a_{i2}x_2+\dots+a_{in}x_n-b_i$$
+para todo $i=1,2,\dots, n$. Si existe un $i$ tal que $f_i$ no tiene la forma descrita como antes el sistema no es lineal.
+
+Forma de sistema de ecuaciones
+
+\begin{align*}
+  a_{11}x_1+a_{12}x_2+\dots+a_{1n}x_n&=b_1\\
+  a_{21}x_1+a_{22}x_2+\dots+a_{2n}x_n&=b_2\\
+   &\vdots\\
+ a_{n1}x_1+a_{n2}x_2+\dots+a_{nn}x_n&=b_n
+\end{align*}
+
+Forma vectorial
+
+\begin{equation}
+A=\begin{pmatrix}
+a_{11} & a_{12} & \cdots & a_{1n}\\
+a_{21} & a_{22} & \cdots & a_{21}\\
+\vdots & \vdots & \ddots & \vdots\\
+a_{n1} & a_{n2} & \cdots & a_{nn}
+\end{pmatrix},
+\quad
+x=\begin{pmatrix}
+x_{1} \\
+x_{2} \\
+\vdots \\
+x_{n} 
+\end{pmatrix},
+\quad
+b=\begin{pmatrix}
+b_{1} \\
+b_{2} \\
+\vdots \\
+b_{n} 
+\end{pmatrix}.
+\end{equation}
+Asi el sistema lineal en su forma matricial es:
+$$Ax=b.$$
+En ocaciones escribiremos simplemente $A=(a_{ij})$, $i,j=1,2,..,n$.  
+
+
+## 3.1 Solución de sistemas de ecuaciones lineales $Ax=b.$
+
+**Métodos directos**
+
+- Los métodos directos encuentran la solución en un número *finito* de operaciones. 
+
+- En ausencia de errores de redondeo el resultado es exacto.
+
+- Tiene como base la eliminación Gaussiana.
+
+- Generalemente se trabaja con matrices completas o casi completas.
+
+
+**Métodos iterativos**
+
+- Los métodos iterativos generan una secuencia de aproximaciones (numero infinito de operaciones) que convergen a la solución real bajo ciertas condiciones, como la diagonal dominante o la simetría definida positiva de la matriz del sistema.
+
+- Tiene como base el método del punto fijo
+
+- Generalmente se trabaja con matrices con varios elementos cero.
+
+## 3.2 Métodos directos
+
+
+**Caso 1: matrices triangulares inferior o superior.**
+
+
+- $A=(a_{ij})$ es tringular superior si $a_{ij}=0$ para todo $i<j$.
+- $A=(a_{ij})$ es tringular inferior si $a_{ij}=0$ para todo $i>j$.
+
+
+*Sustitución regresiva*
+
+Para la matriz triangular superior
+
+\begin{equation}
+A=\begin{pmatrix}
+a_{11} & a_{12} & \cdots & a_{1n}\\
+0 & a_{22} & \cdots & a_{21}\\
+\vdots & \vdots & \ddots & \vdots\\
+0 & 0 & \cdots & a_{nn}
+\end{pmatrix},
+\end{equation}
+
+la solución es
+
+\begin{align*}
+  x_n  &=\frac{b_1}{a_{nn}}\\
+  x_{k}&= b_k-\frac{\sum_{i=k-1}^na_{ki}x_i}{a_{kk}}
+\end{align*}
+con $a_{ii}\neq 0$, $i=1,2,...,n$.
+
+*Sustitución progresiva*
+
+similar
+
+**Caso 2 Eliminación Gaussiana**
+
+Método:  
+
+1. Definir la matriz aumentada $(A|b)$.
+
+2. Aplicar operaciones elementales a la matriz aumentada hasta transformar a $A$ en una matriz triangular superior equivalente a $A$.
+
+3. Aplicar caso 1 (sustitución regresiva)
+
+Nota: el sistema puede tener solucion unica, multiple soluciones, o ninguna solución.
+
+
+Ejemplos: ir al libro, pag 288. Resolver por eliminación gaussiana.
+
+https://heavyphysicsblog.wordpress.com/wp-content/uploads/2019/06/analisis-numerico-burden-faires-10ed.pdf
+
+
+A. \begin{align*}
+  3x_1-x_2+2x_3&=12\\
+  x_1+2x_2+3x_3&=11\\
+  2x_1-2x_2-x_3&=2\\
+  
+  \end{align*}
+
+
+B. (error de redondeo) \begin{align*}
+0.0003 x_1+ 1.566 x_2 &=1.569\\
+0.3454 x_1+2.436 x_2  &=1.018
+\end{align*}
+
+
+C. 
+
+\begin{align*}
+58.9 x_1+ 0.03 x_2 &=59.2\\
+-6.10 x_1+5.31 x_2  &=47
+\end{align*}
+
+
+D. 
+
+
+
+
+https://chatgpt.com/c/67b285e9-67fc-8004-a6c8-2f344f3c07ff
+
+```{r}
+
+eliminacion_gauss <- function(A, b) {
+  n <- nrow(A)
+  Ab <- cbind(A, b)  # Matriz aumentada
+  
+  for (i in 1:(n-1)) {
+    for (j in (i+1):n) {
+      factor <- Ab[j, i] / Ab[i, i]
+      Ab[j, ] <- Ab[j, ] - factor * Ab[i, ]
+    }
+  }
+  
+  # Sustitución hacia atrás
+  x <- numeric(n)
+  for (i in n:1) {
+    x[i] <- (Ab[i, n+1] - sum(Ab[i, (i+1):n] * x[(i+1):n])) / Ab[i, i]
+  }
+  return(x)
+}
+
+
+```
+
+
+
+
+### 3.2.1 Factorización LU
+
+La factorización $LU$ descompone $A$ en el producto de una matriz triangular inferior $L$ y una superior $U$, de modo que $LUx = b$ se resuelve en dos pasos: $Ly = b$ y luego $Ux = y$.
+
+Implementación en R
+
+### 3.2.2 Estrategias de pivoteo
+### 3.2.4 Estabilidad y condición
+### 3.2.5 Factorizaón de Cholesky
+
+##  3.3 Métodos indirectos
+
+### 3.3.1 Método de Jacobi
+
+El método de Jacobi es un método iterativo que separa la matriz en su parte diagonal y el resto.
+
+
+### 3.3.2 Métodos de Gauss-Seydel  
+
+Este método es similar al de Jacobi, pero usa los valores actualizados de $x$ conforme se van calculando.
+
+### 3.3.3 (opcional) Método del Gradiente Conjugado
+
+Este método es adecuado para sistemas dispersos y simétricos definidos positivos.
+
+### 3.4 Conclusiones
+
+Los métodos directos son eficientes para sistemas pequeños y bien condicionados.
+
+Los métodos iterativos son preferidos en sistemas grandes y dispersos.
+
+La elección del método depende del tamaño de la matriz, su estructura y la necesidad de precisión computacional.
