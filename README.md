@@ -26,7 +26,11 @@ Draft of the Material class #6 and # 7
 
 https://trejoi.github.io/Numerical-Analysis-Class/Class_6y7_Spring_2025.html
 
+Draft class # 8
 
+please have a look of this video before february 24th class
+
+https://www.youtube.com/watch?v=8BfLkQlqUoA&t=498s
 
 
    
