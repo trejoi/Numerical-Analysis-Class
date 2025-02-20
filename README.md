@@ -30,7 +30,9 @@ Draft class # 8
 
 please have a look of this video before february 24th class
 
-https://www.youtube.com/watch?v=8BfLkQlqUoA&t=498s
+https://www.youtube.com/watch?v=8BfLkQlqUoA&t=2s
+
+
 
 
    
