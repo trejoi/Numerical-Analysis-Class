@@ -1,0 +1,532 @@
+---
+title: "Análisis Numérico I, Primavera 2025"
+subtitle: "Análisis Numérico, R. L. Burden y J. D. Faires, ed. 10."
+author: "Instructor: Imelda Trejo"
+date: "Last update: 2025-Febrero-16"
+output: 
+  html_document: 
+    toc: true
+    toc_depth: 3
+    toc_float: true
+    code_folding: hide
+
+---
+# 3 Algebra lineal numérica 
+
+Un sistema con coeficientes reales de $n$ incognitas y $n$ ecuaciones:
+
+\begin{align*}
+  f_1(x_1,x_2,...,x_n)&=0\\
+  f_2(x_1,x_2,...,x_n)&=0\\
+   &\vdots\\
+ f_n(x_1,x_2,...,x_n) &=0
+\end{align*}
+
+es lineal si 
+$$f_i(x_1,x_2,...,x_n)=a_{i1}x_1+a_{i2}x_2+\dots+a_{in}x_n-b_i$$
+para todo $i=1,2,\dots, n$. Si existe un $i$ tal que $f_i$ no tiene la forma descrita como antes el sistema no es lineal.
+
+Forma de sistema de ecuaciones
+
+\begin{align*}
+  a_{11}x_1+a_{12}x_2+\dots+a_{1n}x_n&=b_1\\
+  a_{21}x_1+a_{22}x_2+\dots+a_{2n}x_n&=b_2\\
+   &\vdots\\
+ a_{n1}x_1+a_{n2}x_2+\dots+a_{nn}x_n&=b_n
+\end{align*}
+
+Forma vectorial
+
+\begin{equation}
+A=\begin{pmatrix}
+a_{11} & a_{12} & \cdots & a_{1n}\\
+a_{21} & a_{22} & \cdots & a_{21}\\
+\vdots & \vdots & \ddots & \vdots\\
+a_{n1} & a_{n2} & \cdots & a_{nn}
+\end{pmatrix},
+\quad
+x=\begin{pmatrix}
+x_{1} \\
+x_{2} \\
+\vdots \\
+x_{n} 
+\end{pmatrix},
+\quad
+b=\begin{pmatrix}
+b_{1} \\
+b_{2} \\
+\vdots \\
+b_{n} 
+\end{pmatrix}.
+\end{equation}
+Asi el sistema lineal en su forma matricial es:
+$$Ax=b.$$
+En ocaciones escribiremos simplemente $A=(a_{ij})$, $i,j=1,2,..,n$.  
+
+Nota: el sistema puede tener solucion única, multiples soluciones, o ninguna solución.
+
+
+## 3.1 Solución de sistemas de ecuaciones lineales $Ax=b.$
+
+**Métodos directos**
+
+- Los métodos directos encuentran la solución en un número *finito* de operaciones. 
+
+- En ausencia de errores de redondeo el resultado es exacto.
+
+- Tiene como base la eliminación Gaussiana.
+
+- Generalemente se trabaja con matrices completas o casi completas.
+
+
+**Métodos iterativos**
+
+- Los métodos iterativos generan una secuencia de aproximaciones (numero infinito de operaciones) que convergen a la solución real bajo ciertas condiciones, como la diagonal dominante o la simetría definida positiva de la matriz del sistema.
+
+- Tiene como base el método del punto fijo
+
+- Generalmente se trabaja con matrices con varios elementos cero.
+
+## 3.2 Métodos directos
+
+
+### 3.2.1 Sust-Reg y Prog
+
+Caso 1: Matrices triangulares inferior o superior.
+
+
+- $A=(a_{ij})$ es tringular superior si $a_{ij}=0$ para todo $i<j$.
+- $A=(a_{ij})$ es tringular inferior si $a_{ij}=0$ para todo $i>j$.
+
+En estos casos se usan sustitución regresiva o progresiva, como se describe acontinuación.
+
+**Sustitución regresiva**
+
+Para la matriz triangular superior
+
+\begin{equation}
+A=\begin{pmatrix}
+a_{11} & a_{12} & \cdots & a_{1n}\\
+0 & a_{22} & \cdots & a_{21}\\
+\vdots & \vdots & \ddots & \vdots\\
+0 & 0 & \cdots & a_{nn}
+\end{pmatrix},
+\end{equation}
+
+la solución es
+
+\begin{align*}
+  x_n  &=\frac{b_1}{a_{nn}}\\
+  x_{k}&= b_k-\frac{\sum_{i=k-1}^na_{ki}x_i}{a_{kk}}
+\end{align*}
+con $a_{ii}\neq 0$, $i=1,2,...,n$.
+
+**Sustitución progresiva**
+
+similar
+
+### 3.2.2 Eliminación Gaussiana
+
+Método:  
+
+1. Definir la matriz aumentada $(A|b)$.
+
+2. Aplicar operaciones elementales a la matriz aumentada hasta transformar a $A$ en una matriz triangular superior equivalente a $A$.
+
+3. Aplicar caso 1 (sustitución regresiva)
+
+
+
+Ejemplos: ir al libro, pag 288. 
+
+https://heavyphysicsblog.wordpress.com/wp-content/uploads/2019/06/analisis-numerico-burden-faires-10ed.pdf
+
+
+Resolver por eliminación gaussiana los siguientes sistems de ecuaciones.
+
+A. \begin{align*}
+  3x_1-x_2+2x_3&=12\\
+  x_1+2x_2+3x_3&=11\\
+  2x_1-2x_2-x_3&=2\\
+  
+  \end{align*}
+
+usando R
+
+```{r}
+
+# Matriz de coeficientes
+A <- matrix(c(3, -1, 2, 1,2,3,2,-2,-1), nrow = 3, byrow = TRUE)
+
+print(A)
+# Vector de términos independientes
+b <- c(12, 11,2)
+
+# Resolver el sistema de ecuaciones
+solucion <- solve(A, b)
+
+# Imprimir la solución
+print(solucion)
+```
+
+B. (error de redondeo) \begin{align*}
+0.0003 x_1+ 1.566 x_2 &=1.569\\
+0.3454 x_1+2.436 x_2  &=1.018
+\end{align*}
+
+Para este ejemplo usando redondeo de 4-cifras significativas, nos produce un error en el cálculo de soluciones.
+
+Solución usando R:
+
+```{r}
+
+# Matriz de coeficientes
+A <- rbind(c(0.0003,1.566), c(0.3454,2.436)) 
+print(A)
+# Vector de términos independientes
+b <- c(1.569, 1.018)
+
+# Resolver el sistema de ecuaciones
+solucion <- solve(A, b)
+
+# Imprimir la solución
+
+paste(c("x_1=",solucion[1],", x_2=",solucion[2]), collapse = " ")
+
+# Error absoluto en la soluciones
+
+paste(c("f_1(x_1,x_2)=",abs(0.0003*solucion[1]+ 1.566*solucion[2]-1.569)),collapse = " ")
+
+paste(c("f_2(x_1,x_2)=",abs(0.3454*solucion[1]+ 2.436*solucion[2]-1.018)),collapse = " ")
+
+```
+
+C. 
+
+\begin{align*}
+58.9 x_1+ 0.03 x_2 &=59.2\\
+-6.10 x_1+5.31 x_2  &=47
+\end{align*}
+
+
+usando R
+
+```{r}
+# Matriz de coeficientes
+A <- rbind(c(58.9,0.03), c(-6.10,5.31)) 
+print(A)
+# Vector de términos independientes
+b <- c(59.2, 47)
+
+# Resolver el sistema de ecuaciones
+solucion <- solve(A, b)
+
+# Imprimir la solución
+print(solucion)
+```
+
+### 3.2.3 Estrategias de pivoteo
+
+Del ejemplo B. para evitar magnificar los errores provocados por redondeo se hace una permutación para tomar el valor más grande debajo de cada pivote y renombrarlo. 
+
+En general, en los método basados en la eliminación Gaussinsa, $LU$, se emplean varias estrategias de pivoteo para evitar divisiones por números pequeños y minimizar los errores de redondeo.
+
+
+**Tipos de Pivoteo**
+
+- Pivoteo parcial: Se intercambian filas para que el pivote en valor absoluto sea el mayor en su columna.
+
+- Pivoteo completo: Se intercambian tanto filas como columnas para maximizar el valor absoluto del pivote.
+
+- Pivoteo escalonado de columnas: Se centra en reorganizar columnas para mejorar la estabilidad sin cambiar la estructura de la matriz de coeficientes.
+
+
+**Pivoteo parcial**
+
+En cada iteración $k$-esima, el pivote $a^{(k)}_{kk}$ es el mayor en valor absoluto, si no es el caso se aplica una permutación en las ecuaciones: $$E^{(k)}_k \leftrightarrow E^{(k)}_p$$ donde $p$ es el número de fila tal que
+$$a_{pk}^{(k)}=max{\{|a^{(k)}_{ik}|\}}_{k+1\leq i \leq n}.$$
+**Pivoteo parcial escalado**
+
+Coloca el elemento en el lugar del pivote más grande en relación con los elementos de su renglon. 
+
+Pasos:
+
+1.Para cada renglo definir el escalar $$s_i=max{\{|a^{(k)}_{ij}|\}}_{1\leq j \leq n}$$
+si $s_i=0$ para alguna fila entonces el sistema lineal no tiene una única solución.
+
+Suponiendo que no es así, elegimos el primer pivote como aquel que satisface
+$$\frac{|a_{p1}|}{s_p}=max{\{\frac{|a_{k1}|}{s_k}\}}_{1\leq k \leq n}$$
+y realizar la permutación $$E_1 \leftrightarrow E_p.$$
+
+Similarmente, antes de eliminar a variable $x_i$ mediante las operaciones 
+$$E_k-m_{ki}E_i \quad \text{para } k=i+1,...,n$$
+elegimos el menor entero $p\geq i$ tal que 
+$$\frac{|a_{pi}|}{s_p}=max{\{\frac{|a_{ki}|}{s_k}\}}_{1\leq k \leq n}$$
+y realizamos el intercambio de renglones $$E_i \leftrightarrow E_p$$ si $i\neq p$.
+
+Ejemplo: aplicar eliminación Gaussiana con pivoteo parcial escalado para resolver
+
+ \begin{align*}
+30.00 x_1+ 591400 x_2 &=591700\\
+5.291 x_1 - 6.130  &=46.78
+\end{align*}
+
+
+
+### 3.2.4 Factorización LU
+
+La factorización $LU$ descompone $A$ en el producto de una matriz triangular inferior $L=(l_{ij})$ y una superior $U=(u_{ij})$, de modo que $LUx = b$ se resuelve en dos pasos: $Ly = b$ y luego $Ux = y$. Usando sustitución progresiva y luego regresiva.
+
+No todas las matrices admiten una factorización $LU$. En caso de admitir una factorización $LU$ ésta factorización no es única. 
+
+Existen tres métodos para hayar estas factoriciaciones:
+
+1. Método de Doolitle,  requiere que los elementos en la diagonal de $L$ sean 1 (teorema 6.19).
+
+2. Método de Crout,  requiere que los elementos en la diagonal de $U$ sean 1 (algoritmo 6.4)
+
+3. Método de Choleski, requiere que $l_{ii}=u_{ii}$, para cada $i$ (algoritmo 6.6).
+
+Ver con detalle el teorema 6.19 y algoritmo 6.4
+
+Ejemplo 5: 328
+
+Ejemplo 3. cuando se requieran emplear permutaciones.
+
+https://heavyphysicsblog.wordpress.com/wp-content/uploads/2019/06/analisis-numerico-burden-faires-10ed.pdf
+
+  
+
+### 3.2.5 Factorización de Cholesky $LL^{t}$
+
+Ver: teorema 6.19 (método que resulta de emplear eliminicacion gaussiana junto con pivoteo parcial)
+
+Ver: algoritmo 6.6
+
+Ejemplo 4: libro pag. 324.
+
+Ejemplo 5: 328
+
+
+Una matriz $A$ admite la factorización de Cholesky si $A$ es **simétrica ($A=A^{t}$)** y definida positiva.
+
+
+Una matriz $A$ es **definida positiva** si $A$ es simétrica y satisface cualquiera de las siguientes propiedades equivalentes:
+
+
+1. **Condición cuadrática:**  
+   
+   \[
+   x^T A x > 0, \quad \forall x \neq 0.
+   \]
+   Es decir, para todo vector no nulo \( x \), el producto cuadrático es estrictamente positivo.
+
+2. **Autovalores positivos:**  
+   
+   Todos los autovalores de \( A \) son estrictamente positivos, es decir, si \( \lambda_i \) son los autovalores de \( A \), entonces:
+   \[
+   \lambda_i > 0 \quad \forall i.
+   \]
+
+3. **Determinantes principales positivos (Criterio de Sylvester):**  
+   Todos los menores principales de \( A \) (determinantes de sus submatrices principales) son positivos:
+   \[
+   \det(A_k) > 0, \quad \forall k = 1, 2, \dots, n,
+   \]
+   donde \( A_k \) es la submatriz principal de tamaño \( k \times k \).
+
+Ejemplo: verificar que la matriz simétrica es definida positiva usando los criterios anteriores. 
+
+
+\begin{equation}
+A=\begin{pmatrix}
+2 & -1 & 0\\
+-1 & 2 & -1\\
+0 & -1 & 2
+\end{pmatrix},
+\end{equation}
+
+
+Nota: la definición de ser $A$ una matriz definida positiva, algunos autores no piden ser $A$ simétrica. En nuestro caso si lo pediremos para tener las equvancias anteriores.
+
+
+
+### 3.2.7 Software LAPACK
+
+ver pag 329 del libro y enlace a la documentación de R para las rutinas empleadas en Solve:
+
+https://www.netlib.org/lapack/lug/node38.html
+
+
+
+### 3.2.6 Estabilidad y número de condición (Mal condicionamiento)
+
+Revizar definiciones de norma vectorial y matricial.
+
+
+Las normas $l_2$ y $l_\infty$ para el vector $x=(x_1,\dots,x_n)^t$ se definen como
+
+$$||x||_2=\{\sum^{n}_{i=1}x^2_i\}^{1/2} \quad y \quad ||x||_\infty= \max _{1\leq i\leq n}|x_i|.$$
+ver libro pag 331: circulos y esferas con cada norma. 
+
+El producto interno de $x=(x_1,\dots,x_n)^t$ con $y=(y_1,\dots,y_n)^t$ lo denotamos como
+$$\left<x,y \right>:=x^ty$$
+
+Desigualdad Cauchy-Schwarz:
+$$\left<x,y \right>\leq ||x||_2 ||y||_2$$
+
+
+
+
+
+
+Teorema 7.7 Las normas $l_2$ y $l_\infty$ son equivalnestes. Esto es para $x\in\mathbb{R}^n$. 
+$$||x||_\infty\leq||x||_2 \leq \sqrt{n}||x||_\infty$$
+En $\mathbb{R}^n$ todas las normas son equivalente.
+
+Teo 7.9 Si $||\cdot||$, es una norma vectorail en $\mathbb{R}^n$, entonces
+
+$$||A||=\max_{||x||=1}||Ax||$$
+es una norma matricial.
+
+Coro 7.10.
+
+Para cualquier $z\neq0$, matriz $A$ y cualquier norma en $\mathbb{R}^n$, se tiene
+
+$$||Az||\leq ||A||\cdot||z||.$$
+Tarea: demostrar las siguientes igualdades para $A=(a_{ij})$ una matriz $n\times n$:
+
+$$||A||_\infty=\max_{||x||_\infty=1}||Ax||_\infty= \max_{1\leq i\leq n}\sum^n_{j=1}|a_{ij}|$$
+
+$$||A||_2=\max_{||x||_2=1}||Ax||_2= \sqrt{\rho(A^tA)}$$
+donde $\rho(\cdot)$ es el radio espectral. Esto es para la matriz $A$:
+$$\rho(A)=\max|\lambda|, \quad \text{donde} \ \lambda \ \text{ es un eigenvalor de} \ A.$$
+Para $\lambda=a+bi$, complejo, $|\lambda|=(a^2+b^2)^{1/2}$.
+
+
+
+Def 7.5 Se dice que una sucesión $\{x^{(k)}\}^{\infty}_{k=1}$ de vectores en $\mathbb{R}^n$ converge a $x$ respecto a la norma $||\cdot||$, si dado $\epsilon>0$, existe un entero $N$ tal que $$||x^{(k)}-x||<\epsilon, \quad \forall \ k\geq N.$$   
+
+Teo. 7.6 La $\{x^{(k)}\}^{\infty}_{k=1}$ converge a $x$ con respecto a la norma $l_\infty$ si y solo si cada uno de sus elementos converge,i.e., $$\lim_{k\to\infty}x^{(k)}_i=x_i.$$
+
+Así, la relación de equivalencia descrita antes ayuda a demostrar convergencia de sucesiones.
+
+Def 7.16 Llamamos convergente a una matriz $A$ $n\times n$ si
+$$\lim_{k\to\infty} (A^k)_{ij}=0, \ \text{para cada} \ i,j=1,\dots,n.$$
+
+**Sistemas sensibles**
+
+El sistema $Ax=b$ es sensible si al modificar o perturbar ligeramente los coeficientes de una matriz $A$ o los coeficientes de $b$ las soluciones resultsntes son muy diferentes.
+
+Ejemplo:
+El sistema
+\begin{eqnarray*}
+x_1+x_2&=&2\\
+10.05x_1+10x_2&=&21
+\end{eqnarray*}
+tiene por solución $(x_1,x_2)=(20,18)$.
+Mientras que 
+\begin{eqnarray*}
+x_1+x_2&=&2\\
+10.1x_1+10x_2&=&21
+\end{eqnarray*}
+tiene por solución $(x_1,x-2)=(10,-8)$.
+
+¿Cómo identificar cuando un sistema es sensible?
+
+$$\text{Problema inical} \ Ax=b  \to \ \text{Problema perturbado}\ \hat{A}\hat{x}=\hat{b}.$$
+Si $A$ es no singular entonces el error relativo satisface
+
+$$\frac{||x-\hat{x}||}{||x||}\leq ||A|| \ ||A^{-1}|| \frac{||b-\hat{b}||}{||b||}$$
+Dem:
+
+Denotamos con
+$$\kappa(A)=||A|| \ ||A^{-1}||$$
+que se conoce como número de condicionamiento de la matriz $A$. 
+
+
+Nota:
+
+$$1=||I||=||A A^{-1}||\leq ||A||\ ||A^{-1}||=\kappa(A).$$
+
+Una matriz $A$ está bien condicionada si $\kappa(A)$ está cerca de 1 y está mal condicionada cuando $\kappa(A)$ es significativamente mayor que 1.
+
+Generalemente, el número de condición se calculara con la $||\cdot||_{\infty}$.
+
+Número de condición espectral:
+
+$$\rho(A)\rho(A^{-1})=\frac{\max\{|\lambda_i|\}}{\min{\{|\lambda_i|}\}}$$
+
+Tarea: verificar
+$$\kappa(A)\geq \rho(A)\rho(A^{-1}).$$
+
+
+Ejercicios varios:
+
+1. Determina el número de condición de la matriz del ejemplo C.
+
+
+2. Determine el número de condición para la matriz
+
+\begin{equation*}
+A=\begin{pmatrix}
+1 & 1 \\
+1.05 & 10
+\end{pmatrix},
+\end{equation*}
+
+3. Determine el número de condición para la matriz
+
+\begin{equation*}
+A=\begin{pmatrix}
+1 & 2 \\
+1.0001 & 2
+\end{pmatrix},
+\end{equation*}
+
+4. Muestre que 
+
+\begin{equation*}
+A=\begin{pmatrix}
+\frac{1}{2} & 0 \\
+\frac{1}{4} & \frac{1}{2}.
+\end{pmatrix},
+\end{equation*}
+es una matriz convergente.
+
+Ver Teo 7.17 completo (pag 344). Las sigueintes declaraciones son equivalentes
+
+1. $A$ es una matriz convergente
+2.    $\rho(A)<1$.
+
+
+
+
+
+##  3.3 Métodos indirectos
+
+### 3.3.1 Método de Jacobi
+
+El método de Jacobi es un método iterativo que separa la matriz en su parte diagonal y el resto.
+
+
+### 3.3.2 Métodos de Gauss-Seydel  
+
+Este método es similar al de Jacobi, pero usa los valores actualizados de $x$ conforme se van calculando.
+
+### 3.3.3 (opcional) Método del Gradiente Conjugado
+
+Este método es adecuado para sistemas dispersos y simétricos definidos positivos.
+
+### 3.4 Conclusiones
+
+Los métodos directos son eficientes para sistemas pequeños y bien condicionados.
+
+Los métodos iterativos son preferidos en sistemas grandes y dispersos.
+
+La elección del método depende del tamaño de la matriz, su estructura y la necesidad de precisión computacional.
+
+
+Ordenes de computo/costo computacional: 
+
+Factorización de Cholesky $O(\frac{n^2}{6})$
