@@ -1926,7 +1926,7 @@ libro pag 331: circulos y esferas con cada norma.</p>
 <span class="math inline">\(l_\infty\)</span> son equivalnestes. Esto es
 para <span class="math inline">\(x\in\mathbb{R}^n\)</span>. <span class="math display">\[||x||_\infty\leq||x||_2 \leq
 \sqrt{n}||x||_\infty\]</span> En <span class="math inline">\(\mathbb{R}^n\)</span> todas las normas son
-equivalente.</p>
+equivalentes.</p>
 <p>Teo 7.9 Si <span class="math inline">\(||\cdot||\)</span>, es una
 norma vectorail en <span class="math inline">\(\mathbb{R}^n\)</span>,
 entonces</p>
@@ -1936,17 +1936,17 @@ una norma matricial.</p>
 <p>Para cualquier <span class="math inline">\(z\neq0\)</span>, matriz
 <span class="math inline">\(A\)</span> y cualquier norma en <span class="math inline">\(\mathbb{R}^n\)</span>, se tiene</p>
 <p><span class="math display">\[||Az||\leq ||A||\cdot||z||.\]</span>
-Tarea: demostrar las siguientes igualdades para <span class="math inline">\(A=(a_{ij})\)</span> una matriz <span class="math inline">\(n\times n\)</span>:</p>
+Tarea demostrar las siguientes igualdades para <span class="math inline">\(A=(a_{ij})\)</span> una matriz <span class="math inline">\(n\times n\)</span>:</p>
 <p><span class="math display">\[||A||_\infty=\max_{||x||_\infty=1}||Ax||_\infty=
 \max_{1\leq i\leq n}\sum^n_{j=1}|a_{ij}|\]</span></p>
 <p><span class="math display">\[||A||_2=\max_{||x||_2=1}||Ax||_2=
-\sqrt{\rho(A^tA)}\]</span> donde <span class="math inline">\(\rho(\cdot)\)</span> es el radio espectral. Esto
-es para la matriz <span class="math inline">\(A\)</span>: <span class="math display">\[\rho(A)=\max|\lambda|, \quad \text{donde} \
+\sqrt{\rho(A^tA)}\]</span> donde <span class="math inline">\(\rho(\cdot)\)</span> es el <strong>radio
+espectral</strong>. Esto es para la matriz <span class="math inline">\(A\)</span>: <span class="math display">\[\rho(A)=\max|\lambda|, \quad \text{donde} \
 \lambda \ \text{ es un eigenvalor de} \ A.\]</span> Para <span class="math inline">\(\lambda=a+bi\)</span>, complejo, <span class="math inline">\(|\lambda|=(a^2+b^2)^{1/2}\)</span>.</p>
-<p>Def 7.5 Se dice que una sucesión <span class="math inline">\(\{x^{(k)}\}^{\infty}_{k=1}\)</span> de vectores en
+<p>Definición 7.5: Se dice que una sucesión <span class="math inline">\(\{x^{(k)}\}^{\infty}_{k=1}\)</span> de vectores en
 <span class="math inline">\(\mathbb{R}^n\)</span> converge a <span class="math inline">\(x\)</span> respecto a la norma <span class="math inline">\(||\cdot||\)</span>, si dado <span class="math inline">\(\epsilon&gt;0\)</span>, existe un entero <span class="math inline">\(N\)</span> tal que <span class="math display">\[||x^{(k)}-x||&lt;\epsilon, \quad \forall \ k\geq
 N.\]</span></p>
-<p>Teo. 7.6 La <span class="math inline">\(\{x^{(k)}\}^{\infty}_{k=1}\)</span> converge a
+<p>Teorema. 7.6 La <span class="math inline">\(\{x^{(k)}\}^{\infty}_{k=1}\)</span> converge a
 <span class="math inline">\(x\)</span> con respecto a la norma <span class="math inline">\(l_\infty\)</span> si y solo si cada uno de sus
 elementos converge,i.e., <span class="math display">\[\lim_{k\to\infty}x^{(k)}_i=x_i.\]</span></p>
 <p>Así, la relación de equivalencia descrita antes ayuda a demostrar
@@ -1957,7 +1957,7 @@ n\)</span> si <span class="math display">\[\lim_{k\to\infty}
 <p><strong>Sistemas sensibles</strong></p>
 <p>El sistema <span class="math inline">\(Ax=b\)</span> es sensible si
 al modificar o perturbar ligeramente los coeficientes de una matriz
-<span class="math inline">\(A\)</span> o los coeficientes de <span class="math inline">\(b\)</span> las soluciones resultsntes son muy
+<span class="math inline">\(A\)</span> o los coeficientes de <span class="math inline">\(b\)</span> las soluciones resultantes son muy
 diferentes.</p>
 <p>Ejemplo: El sistema <span class="math display">\[\begin{eqnarray*}
 x_1+x_2&amp;=&amp;2\\
@@ -1989,14 +1989,33 @@ cerca de 1 y está mal condicionada cuando <span class="math inline">\(\kappa(A)
 \rho(A)\rho(A^{-1}).\]</span></p>
 <p>Ejercicios varios:</p>
 <ol style="list-style-type: decimal">
-<li><p>Determina el número de condición de la matriz del ejemplo
-C.</p></li>
-<li><p>Determine el número de condición para la matriz</p></li>
+<li>Determina el número de condición de la matriz del ejemplo B.</li>
+</ol>
+<pre class="r"><code># Matriz de coeficientes
+A &lt;- rbind(c(0.0003,1.566), c(0.3454,2.436)) 
+print(A)</code></pre>
+<pre><code>##        [,1]  [,2]
+## [1,] 0.0003 1.566
+## [2,] 0.3454 2.436</code></pre>
+<pre class="r"><code># Calcular la inversa de una matriz
+solucion &lt;- solve(A)
+
+# Imprimir la solución
+print(solucion)</code></pre>
+<pre><code>##            [,1]          [,2]
+## [1,] -4.5097281  2.8991109393
+## [2,]  0.6394335 -0.0005553852</code></pre>
+<pre class="r"><code># numero de condición
+
+print(kappa(A))</code></pre>
+<pre><code>## [1] 17.36465</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li>Determine el número de condición para la matriz</li>
 </ol>
 <p><span class="math display">\[\begin{equation*}
 A=\begin{pmatrix}
 1 &amp; 1 \\
-1.05 &amp; 10
+10.05 &amp; 10
 \end{pmatrix},
 \end{equation*}\]</span></p>
 <ol start="3" style="list-style-type: decimal">
@@ -2026,21 +2045,40 @@ convergente</li>
 </ol>
 </div>
 </div>
-<div id="métodos-indirectos" class="section level2">
-<h2>3.3 Métodos indirectos</h2>
+<div id="métodos-iterativos" class="section level2">
+<h2>3.3 Métodos iterativos</h2>
+<p>Tienen como base el método del punto fijo.</p>
+<p>El sistema lineal <span class="math inline">\(Ax-b=0\)</span> es
+equivalente al sistema <span class="math inline">\(Bx+c=x\)</span>.
+Definiendo <span class="math inline">\(G(x)=Bx+c\)</span> entonces <span class="math inline">\(G(x)=x\)</span>. Así el resolver el sistema lineal
+<span class="math inline">\(Ax=b\)</span> es equivalente a encontrar los
+puntos fijos de <span class="math inline">\(G\)</span>.</p>
+<p>Definimos la sucesión <span class="math inline">\(\{x^{(k)}\}^{\infty}_{k=1}\)</span> de vectores en
+<span class="math inline">\(\mathbb{R}^n\)</span> con <span class="math inline">\(x^{(0)}\)</span> como <span class="math display">\[x^{(k)}=Bx^{(k-1)}+c=G(x^{(k-1)})\]</span>
+<strong>Teorema de convergencia.</strong> Sea <span class="math inline">\(x^{(k)}\)</span> sucesión definida por <span class="math inline">\(x^{(k)}=Bx^{(k)}+c\)</span> y <span class="math inline">\(x\)</span> es tal que <span class="math inline">\(Bx+c=x\)</span>. Entonces si <span class="math inline">\(||B||&lt;1\)</span> se tiene <span class="math display">\[\lim_{k\to\infty}x^{(k)}=x.\]</span> Nota: En el
+teorema de convergencia anterir, la conclusión implica ser cierta para
+cuando <span class="math inline">\(\rho(A)&lt;1\)</span>.</p>
+<p>Cota para hallar cierta exactitud en las iteraciones:</p>
+<p><span class="math display">\[||x^{0}-x||.\]</span></p>
 <div id="método-de-jacobi" class="section level3">
 <h3>3.3.1 Método de Jacobi</h3>
 <p>El método de Jacobi es un método iterativo que separa la matriz en su
 parte diagonal y el resto.</p>
+<p>A nice video for the class</p>
+<p><a href="https://www.youtube.com/watch?v=8BfLkQlqUoA&amp;t=498s" class="uri">https://www.youtube.com/watch?v=8BfLkQlqUoA&amp;t=498s</a></p>
 </div>
-<div id="métodos-de-gauss-seydel" class="section level3">
-<h3>3.3.2 Métodos de Gauss-Seydel</h3>
+<div id="método-de-gauss-seydel" class="section level3">
+<h3>3.3.2 Método de Gauss-Seydel</h3>
+<p><a href="https://www.youtube.com/watch?v=Pq0XOfk0XOA" class="uri">https://www.youtube.com/watch?v=Pq0XOfk0XOA</a></p>
 <p>Este método es similar al de Jacobi, pero usa los valores
 actualizados de <span class="math inline">\(x\)</span> conforme se van
 calculando.</p>
 </div>
+<div id="método-de-sor" class="section level3">
+<h3>3.3.3 Método de SOR</h3>
+</div>
 <div id="opcional-método-del-gradiente-conjugado" class="section level3">
-<h3>3.3.3 (opcional) Método del Gradiente Conjugado</h3>
+<h3>3.3.4 (opcional) Método del Gradiente Conjugado</h3>
 <p>Este método es adecuado para sistemas dispersos y simétricos
 definidos positivos.</p>
 </div>
