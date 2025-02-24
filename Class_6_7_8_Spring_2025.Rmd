@@ -382,7 +382,7 @@ $$\left<x,y \right>\leq ||x||_2 ||y||_2$$
 
 Teorema 7.7 Las normas $l_2$ y $l_\infty$ son equivalnestes. Esto es para $x\in\mathbb{R}^n$. 
 $$||x||_\infty\leq||x||_2 \leq \sqrt{n}||x||_\infty$$
-En $\mathbb{R}^n$ todas las normas son equivalente.
+En $\mathbb{R}^n$ todas las normas son equivalentes.
 
 Teo 7.9 Si $||\cdot||$, es una norma vectorail en $\mathbb{R}^n$, entonces
 
@@ -394,20 +394,20 @@ Coro 7.10.
 Para cualquier $z\neq0$, matriz $A$ y cualquier norma en $\mathbb{R}^n$, se tiene
 
 $$||Az||\leq ||A||\cdot||z||.$$
-Tarea: demostrar las siguientes igualdades para $A=(a_{ij})$ una matriz $n\times n$:
+Tarea demostrar las siguientes igualdades para $A=(a_{ij})$ una matriz $n\times n$:
 
 $$||A||_\infty=\max_{||x||_\infty=1}||Ax||_\infty= \max_{1\leq i\leq n}\sum^n_{j=1}|a_{ij}|$$
 
 $$||A||_2=\max_{||x||_2=1}||Ax||_2= \sqrt{\rho(A^tA)}$$
-donde $\rho(\cdot)$ es el radio espectral. Esto es para la matriz $A$:
+donde $\rho(\cdot)$ es el **radio espectral**. Esto es para la matriz $A$:
 $$\rho(A)=\max|\lambda|, \quad \text{donde} \ \lambda \ \text{ es un eigenvalor de} \ A.$$
 Para $\lambda=a+bi$, complejo, $|\lambda|=(a^2+b^2)^{1/2}$.
 
 
 
-Def 7.5 Se dice que una sucesión $\{x^{(k)}\}^{\infty}_{k=1}$ de vectores en $\mathbb{R}^n$ converge a $x$ respecto a la norma $||\cdot||$, si dado $\epsilon>0$, existe un entero $N$ tal que $$||x^{(k)}-x||<\epsilon, \quad \forall \ k\geq N.$$   
+Definición 7.5: Se dice que una sucesión $\{x^{(k)}\}^{\infty}_{k=1}$ de vectores en $\mathbb{R}^n$ converge a $x$ respecto a la norma $||\cdot||$, si dado $\epsilon>0$, existe un entero $N$ tal que $$||x^{(k)}-x||<\epsilon, \quad \forall \ k\geq N.$$   
 
-Teo. 7.6 La $\{x^{(k)}\}^{\infty}_{k=1}$ converge a $x$ con respecto a la norma $l_\infty$ si y solo si cada uno de sus elementos converge,i.e., $$\lim_{k\to\infty}x^{(k)}_i=x_i.$$
+Teorema. 7.6 La $\{x^{(k)}\}^{\infty}_{k=1}$ converge a $x$ con respecto a la norma $l_\infty$ si y solo si cada uno de sus elementos converge,i.e., $$\lim_{k\to\infty}x^{(k)}_i=x_i.$$
 
 Así, la relación de equivalencia descrita antes ayuda a demostrar convergencia de sucesiones.
 
@@ -416,7 +416,7 @@ $$\lim_{k\to\infty} (A^k)_{ij}=0, \ \text{para cada} \ i,j=1,\dots,n.$$
 
 **Sistemas sensibles**
 
-El sistema $Ax=b$ es sensible si al modificar o perturbar ligeramente los coeficientes de una matriz $A$ o los coeficientes de $b$ las soluciones resultsntes son muy diferentes.
+El sistema $Ax=b$ es sensible si al modificar o perturbar ligeramente los coeficientes de una matriz $A$ o los coeficientes de $b$ las soluciones resultantes son muy diferentes.
 
 Ejemplo:
 El sistema
@@ -463,7 +463,26 @@ $$\kappa(A)\geq \rho(A)\rho(A^{-1}).$$
 
 Ejercicios varios:
 
-1. Determina el número de condición de la matriz del ejemplo C.
+1. Determina el número de condición de la matriz del ejemplo B.
+
+
+
+```{r}
+# Matriz de coeficientes
+A <- rbind(c(0.0003,1.566), c(0.3454,2.436)) 
+print(A)
+
+# Calcular la inversa de una matriz
+solucion <- solve(A)
+
+# Imprimir la solución
+print(solucion)
+
+# numero de condición
+
+print(kappa(A))
+
+```
 
 
 2. Determine el número de condición para la matriz
@@ -471,7 +490,7 @@ Ejercicios varios:
 \begin{equation*}
 A=\begin{pmatrix}
 1 & 1 \\
-1.05 & 10
+10.05 & 10
 \end{pmatrix},
 \end{equation*}
 
@@ -501,20 +520,48 @@ Ver Teo 7.17 completo (pag 344). Las sigueintes declaraciones son equivalentes
 
 
 
+##  3.3 Métodos iterativos
+
+Tienen como base el método del punto fijo.
+
+El sistema lineal $Ax-b=0$ es equivalente al sistema $Bx+c=x$. Definiendo $G(x)=Bx+c$ entonces $G(x)=x$. Así el resolver el sistema lineal $Ax=b$ es equivalente a encontrar los puntos fijos de $G$.
 
 
-##  3.3 Métodos indirectos
+Definimos la sucesión $\{x^{(k)}\}^{\infty}_{k=1}$ de vectores en $\mathbb{R}^n$ con $x^{(0)}$ como
+$$x^{(k)}=Bx^{(k-1)}+c=G(x^{(k-1)})$$
+**Teorema de convergencia.**
+Sea $x^{(k)}$ sucesión definida por $x^{(k)}=Bx^{(k)}+c$ y $x$ es tal que $Bx+c=x$. Entonces si $||B||<1$  se tiene
+$$\lim_{k\to\infty}x^{(k)}=x.$$
+Nota: En el teorema de convergencia anterir, la conclusión implica ser cierta para cuando $\rho(A)<1$.
+
+Cota para hallar cierta exactitud en las iteraciones:
+
+$$||x^{0}-x||.$$
+
+
 
 ### 3.3.1 Método de Jacobi
 
 El método de Jacobi es un método iterativo que separa la matriz en su parte diagonal y el resto.
 
 
-### 3.3.2 Métodos de Gauss-Seydel  
+A nice video for the class 
+
+https://www.youtube.com/watch?v=8BfLkQlqUoA&t=498s
+
+
+### 3.3.2 Método de Gauss-Seydel  
+
+https://www.youtube.com/watch?v=Pq0XOfk0XOA
 
 Este método es similar al de Jacobi, pero usa los valores actualizados de $x$ conforme se van calculando.
 
-### 3.3.3 (opcional) Método del Gradiente Conjugado
+
+### 3.3.3 Método de SOR
+
+
+
+### 3.3.4 (opcional) Método del Gradiente Conjugado
 
 Este método es adecuado para sistemas dispersos y simétricos definidos positivos.
 
