@@ -22,9 +22,9 @@ Draft of the Material class #4 and #5
 
 https://trejoi.github.io/Numerical-Analysis-Class/Class_4y5_Spring_2025.html
 
-Draft of the Material class #6 and # 7
+Draft of the Material class #6, 7, and 8
 
-https://trejoi.github.io/Numerical-Analysis-Class/Class_6y7_Spring_2025.html
+https://trejoi.github.io/Numerical-Analysis-Class/Class_6_7_8_Spring_2025.html
 
 Draft class # 8
 
