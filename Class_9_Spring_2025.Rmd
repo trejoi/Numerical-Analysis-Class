@@ -1,0 +1,159 @@
+---
+title: "Solving Nonlinear Systems of Equations: Fixed-Point Iteration and Newton’s Method"
+author: "Imelda Trejo"
+date: "2025-03-03"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+## 1. Introduction
+
+We iam to solve systems of nonlinear equations: \(F(x) = 0, \quad F: \mathbb{R}^n \to \mathbb{R}^n\) where \(x\) is an \(n\)-dimensional vector of unknowns. Two common numerical methods for solving these systems are **Fixed-Point Iteration** and **Newton’s Method**.
+
+---
+
+## 2. Fixed-Point Iteration Method
+
+### 2.1 Concept
+
+As before, for the system \[F(x) = 0\] we rewritten it in the form: \[x = G(x).\] The **iteration process** follows: \[x^{(k+1)} = G(x^{(k)})\] until convergence.
+
+### 2.2 Convergence Condition
+
+The method converges if **the function ** **\(G(x)\)** **is a contraction mapping**, meaning that its **Jacobian satisfies**: \(\| G'(x) \| < 1\) in some neighborhood of the solution.
+
+Look Teorema 10.6 for convergence of the fix point method (pag 488).
+
+https://heavyphysicsblog.wordpress.com/wp-content/uploads/2019/06/analisis-numerico-burden-faires-10ed.pdf
+
+### 2.3 Algorithm
+
+1. Choose an initial guess \(x^{(0)}\).
+2. Compute \(x^{(k+1)} = G(x^{(k)})\).
+3. Repeat until \(\| x^{(k+1)} - x^{(k)} \| < \epsilon\).
+
+### 2.4 Example (Homework-use software)
+
+Solve the system: \[x_1 = \cos(x_2)\] \[x_2 = \sin(x_1).\] 
+A possible function \(G(x)\) is: 
+\[G(x) = \begin{bmatrix} \cos(x_2) \\ \sin(x_1) \end{bmatrix}.\]
+
+---
+
+
+
+
+## 3. Newton’s Method
+
+See page page 494, algorithm 10.1 and examples
+
+https://heavyphysicsblog.wordpress.com/wp-content/uploads/2019/06/analisis-numerico-burden-faires-10ed.pdf
+
+### 3.1 Concept
+
+Newton’s method is based on **linearizing (Taylor expansion)** the system using the **Jacobian matrix**: 
+
+\[J_F(x) = \begin{bmatrix} \frac{\partial F_1}{\partial x_1} & \cdots & \frac{\partial F_1}{\partial x_n} \\ \vdots & \ddots & \vdots \\ \frac{\partial F_n}{\partial x_1} & \cdots & \frac{\partial F_n}{\partial x_n} \end{bmatrix}.\] 
+Then, the **iterative formula** is: \[x^{(k+1)} = x^{(k)} - J^{-1}_F(x^{(k)}) F(x^{(k)}).\]
+
+### 3.2 Algorithm
+
+1. Choose an initial guess \(x^{(0)}\).
+2. Compute the Jacobian \(J_F(x^{(k)})\) and function values \(F(x^{(k)})\).
+3. Solve the linear system: \(J_F(x^{(k)}) \Delta x^{(k)} = -F(x^{(k)})\)
+4. Update the solution: \(x^{(k+1)} = x^{(k)} + \Delta x^{(k)}\)
+5. Repeat until \(\| \Delta x \| < \epsilon\).
+
+### 3.3 Example
+
+Solve: \[x_1^2 + x_2^2 - 4 = 0\] \[x_1 - x_2 = 0\] The Jacobian matrix is: \[J_F(x) = \begin{bmatrix} 2x_1 & 2x_2 \\ 1 & -1 \end{bmatrix}\]
+
+---
+
+## 4. Comparison
+
+| Method                    | Pros                         | Cons                                   |
+| ------------------------- | ---------------------------- | -------------------------------------- |
+| **Fixed-Point Iteration** | Simple, easy to implement    | Slow convergence, requires contraction |
+| **Newton’s Method**       | Fast convergence (quadratic) | Requires Jacobian and matrix inversion |
+
+---
+
+## 5. R Implementation
+
+### Fixed-Point Iteration in R
+
+```{r}
+fixed_point <- function(G, x0, tol = 1e-6, max_iter = 100) {
+  x <- x0
+  for (k in 1:max_iter) {
+    x_new <- G(x)
+    if (max(abs(x_new - x)) < tol) {
+      cat("Converged in", k, "iterations\n")
+      return(x_new)
+    }
+    x <- x_new
+  }
+  cat("Did not converge in", max_iter, "iterations\n")
+  return(x)
+}
+
+# Define G(x) function
+G <- function(x) {
+  c(cos(x[2]), sin(x[1]))
+}
+
+# Initial guess
+x0 <- c(0.5, 0.5)
+
+# Solve using Fixed-Point Iteration
+solution_fp <- fixed_point(G, x0)
+print(solution_fp)
+```
+
+### Newton’s Method in R
+
+```{r}
+newton_method <- function(F, JF, x0, tol = 1e-6, max_iter = 100) {
+  x <- x0
+  for (k in 1:max_iter) {
+    J <- JF(x)
+    F_val <- F(x)
+    dx <- solve(J, -F_val)  # Solve J dx = -F
+    x_new <- x + dx
+    if (max(abs(dx)) < tol) {
+      cat("Converged in", k, "iterations\n")
+      return(x_new)
+    }
+    x <- x_new
+  }
+  cat("Did not converge in", max_iter, "iterations\n")
+  return(x)
+}
+
+# Define system F(x)
+F <- function(x) {
+  c(x[1]^2 + x[2]^2 - 4, x[1] - x[2])
+}
+
+# Define Jacobian JF(x)
+JF <- function(x) {
+  matrix(c(2*x[1], 2*x[2], 1, -1), nrow=2, byrow=TRUE)
+}
+
+# Initial guess
+x0 <- c(1, 1)
+
+# Solve using Newton's Method
+solution_newton <- newton_method(F, JF, x0)
+print(solution_newton)
+```
+
+A nice video for Newton's method!
+
+https://www.youtube.com/watch?v=p0SBubUfwiI
