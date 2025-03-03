@@ -1977,11 +1977,12 @@ relativo satisface</p>
 matriz <span class="math inline">\(A\)</span>.</p>
 <p>Nota:</p>
 <p><span class="math display">\[1=||I||=||A A^{-1}||\leq ||A||\
-||A^{-1}||=\kappa(A).\]</span></p>
-<p>Una matriz <span class="math inline">\(A\)</span> está bien
-condicionada si <span class="math inline">\(\kappa(A)\)</span> está
-cerca de 1 y está mal condicionada cuando <span class="math inline">\(\kappa(A)\)</span> es significativamente mayor que
-1.</p>
+||A^{-1}||=\kappa(A).\]</span> Una matriz <span class="math inline">\(A\)</span> está bien condicionada si <span class="math inline">\(\kappa(A)\)</span> está cerca de 1 y está mal
+condicionada cuando <span class="math inline">\(\kappa(A)\)</span> es
+significativamente mayor que 1. ver libro 359.</p>
+<p>Similarmente, el sistema <span class="math inline">\(Ax=b\)</span> es
+bien condicionadocon si el número de condición <span class="math inline">\(\kappa(A)\)</span> es pequeño. Si no se dice que
+el sistema esta mal condicionado.</p>
 <p>Generalemente, el número de condición se calculara con la <span class="math inline">\(||\cdot||_{\infty}\)</span>.</p>
 <p>Número de condición espectral:</p>
 <p><span class="math display">\[\rho(A)\rho(A^{-1})=\frac{\max\{|\lambda_i|\}}{\min{\{|\lambda_i|}\}}\]</span></p>
@@ -2054,16 +2055,35 @@ Definiendo <span class="math inline">\(G(x)=Bx+c\)</span> entonces <span class="
 <span class="math inline">\(Ax=b\)</span> es equivalente a encontrar los
 puntos fijos de <span class="math inline">\(G\)</span>.</p>
 <p>Definimos la sucesión <span class="math inline">\(\{x^{(k)}\}^{\infty}_{k=1}\)</span> de vectores en
-<span class="math inline">\(\mathbb{R}^n\)</span> con <span class="math inline">\(x^{(0)}\)</span> como <span class="math display">\[x^{(k)}=Bx^{(k-1)}+c=G(x^{(k-1)})\]</span>
-<strong>Teorema de convergencia.</strong> Sea <span class="math inline">\(x^{(k)}\)</span> sucesión definida por <span class="math inline">\(x^{(k)}=Bx^{(k)}+c\)</span> y <span class="math inline">\(x\)</span> es tal que <span class="math inline">\(Bx+c=x\)</span>. Entonces si <span class="math inline">\(||B||&lt;1\)</span> se tiene <span class="math display">\[\lim_{k\to\infty}x^{(k)}=x.\]</span> Nota: En el
-teorema de convergencia anterir, la conclusión implica ser cierta para
-cuando <span class="math inline">\(\rho(A)&lt;1\)</span>.</p>
+<span class="math inline">\(\mathbb{R}^n\)</span> con <span class="math inline">\(x^{(0)}\)</span> como <span class="math display">\[x^{(k)}=Tx^{(k-1)}+c=G(x^{(k-1)}).\]</span></p>
+<p><strong>Teorema de convergencia.</strong> Para cualquier <span class="math inline">\(x^{(0)}\in \mathbb{R}^n\)</span>, la sucesión
+<span class="math display">\[x^{(k)}=Tx^{(k-1)}+c \ \text{ para cada}\
+k\geq 1,\]</span> converge a la solución única de <span class="math inline">\(x=Tx+c\)</span> si y solo si <span class="math inline">\(\rho(A)&lt;1\)</span>.</p>
+<p>Dem. tarea</p>
 <p>Cota para hallar cierta exactitud en las iteraciones:</p>
-<p><span class="math display">\[||x^{0}-x||.\]</span></p>
+<p><strong>Corolario de convergencia.</strong></p>
+<p>Si <span class="math inline">\(||T||&lt;1\)</span> para toda norma
+matricial natural y si <span class="math inline">\(c\)</span> es un
+vector cualquiera, entonces la sucesión <span class="math display">\[x^{(k)}=Tx^{(k-1)}+c\]</span> converge a un
+vector <span class="math inline">\(x\in \mathbb{R}^n\)</span>, para
+cualquier <span class="math inline">\(x^{(0)}\in \mathbb{R}^n\)</span> y
+las siguientes cotas de error son validas:</p>
+<p><span class="math display">\[(i) \ ||x-x^{(k)}||\leq
+||T||^{k}||x^{(0)}-x||.\]</span> <span class="math display">\[(ii) \
+||x-x^{(k)}||\leq \frac{||T||^{k}}{1-||T||}||x^{(1)}-x^{(0)}||.\]</span>
+Dem. tarea</p>
 <div id="método-de-jacobi" class="section level3">
 <h3>3.3.1 Método de Jacobi</h3>
-<p>El método de Jacobi es un método iterativo que separa la matriz en su
-parte diagonal y el resto.</p>
+<p>El método de Jacobi es un método iterativo que separa la matriz <span class="math inline">\(A\)</span> en su parte diagonal y el resto
+(Pizarrón).</p>
+<p>Equivalentemente, el <strong>método iterativo</strong> es:</p>
+<p><span class="math display">\[
+  x_i^{(k+1)} = \frac{1}{a_{ii}} \left( b_i - \sum_{j \neq i} a_{ij}
+x_j^{(k)} \right)
+  \]</span></p>
+<p>para cada <span class="math inline">\(i = 1, \dots, n\)</span>, donde
+<span class="math inline">\(a_{ii} \neq 0\)</span> con un vector inicial
+dado <span class="math inline">\(x^{0}\)</span>.</p>
 <p>A nice video for the class</p>
 <p><a href="https://www.youtube.com/watch?v=8BfLkQlqUoA&amp;t=498s" class="uri">https://www.youtube.com/watch?v=8BfLkQlqUoA&amp;t=498s</a></p>
 </div>
@@ -2073,17 +2093,106 @@ parte diagonal y el resto.</p>
 <p>Este método es similar al de Jacobi, pero usa los valores
 actualizados de <span class="math inline">\(x\)</span> conforme se van
 calculando.</p>
+<p><strong>Método iterativo:</strong></p>
+<p><span class="math display">\[
+  x_i^{(k+1)} = \frac{1}{a_{ii}} \left( b_i - \sum_{j &lt; i} a_{ij}
+x_j^{(k+1)} - \sum_{j &gt; i} a_{ij} x_j^{(k)} \right)
+\]</span> con un vector inicial <span class="math inline">\(x^{0}\)</span>.</p>
 </div>
-<div id="método-de-sor" class="section level3">
-<h3>3.3.3 Método de SOR</h3>
+<div id="opcional-método-de-sor" class="section level3">
+<h3>3.3.3 (opcional) Método de SOR</h3>
+<p>Es una extención del método de Gauss-Seidel, donde se introduce un
+parámetro de relajación <span class="math inline">\(\omega\)</span></p>
+<p><span class="math display">\[x_i^{(k+1)} = (1 - \omega) x_i^{(k)} +
+\frac{\omega}{a_{ii}} \left( b_i - \sum_{j &lt; i} a_{ij} x_j^{(k+1)} -
+\sum_{j &gt; i} a_{ij} x_j^{(k)} \right)\]</span></p>
+<p>donde <span class="math inline">\(0 &lt; \omega &lt; 2\)</span>.</p>
 </div>
 <div id="opcional-método-del-gradiente-conjugado" class="section level3">
 <h3>3.3.4 (opcional) Método del Gradiente Conjugado</h3>
 <p>Este método es adecuado para sistemas dispersos y simétricos
 definidos positivos.</p>
 </div>
+<div id="lab-implement-an-iterative-method" class="section level3">
+<h3>3.3.5 LAB (implement an iterative method)</h3>
+<pre class="r"><code>#esta función hace la rutina de Jacobi
+
+jacobi &lt;- function(A, b, tol = 1e-6, max_iter = 1000) {
+  n &lt;- nrow(A)
+  x &lt;- rep(0, n)  # Vector inicial de ceros
+  x_new &lt;- rep(0, n)  # Vector para la nueva iteración
+  
+  for (k in 1:max_iter) {
+    for (i in 1:n) {
+      sum_ax &lt;- sum(A[i, -i] * x[-i])  # Suma de los términos excepto el diagonal
+      x_new[i] &lt;- (b[i] - sum_ax) / A[i, i]  # Nueva estimación
+    }
+    
+    # Criterio de convergencia
+    if (max(abs(x_new - x)) &lt; tol) {
+      cat(&quot;Convergencia alcanzada en&quot;, k, &quot;iteraciones\n&quot;)
+      return(x_new)
+    }
+    
+    x &lt;- x_new  # Actualizar el vector de soluciones
+  }
+  
+  cat(&quot;No se alcanzó la convergencia en&quot;, max_iter, &quot;iteraciones\n&quot;)
+  return(x_new)
+}
+
+# Ejemplo de uso:
+A &lt;- matrix(c(4, -1, 0, -1,
+              -1, 4, -1, 0,
+              0, -1, 4, -1,
+              -1, 0, -1, 4), nrow=4, byrow=TRUE)
+
+b &lt;- c(15, 10, 10, 15)
+
+sol &lt;- jacobi(A, b)</code></pre>
+<pre><code>## Convergencia alcanzada en 23 iteraciones</code></pre>
+<pre class="r"><code>print(sol)</code></pre>
+<pre><code>## [1] 6.874999 5.624999 5.624999 6.874999</code></pre>
+<pre class="r"><code>solve(A,b)</code></pre>
+<pre><code>## [1] 6.875 5.625 5.625 6.875</code></pre>
+</div>
+<div id="comparison" class="section level3">
+<h3>4. Comparison</h3>
+<table>
+<colgroup>
+<col width="22%" />
+<col width="25%" />
+<col width="51%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Method</th>
+<th>Pros</th>
+<th>Cons</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Jacobi Method</strong></td>
+<td>Simple, parallelizable</td>
+<td>Slow convergence, requires diagonally dominant matrix</td>
+</tr>
+<tr class="even">
+<td><strong>Gauss-Seidel Method</strong></td>
+<td>Faster than Jacobi</td>
+<td>Not easily parallelizable</td>
+</tr>
+<tr class="odd">
+<td><strong>SOR Method</strong></td>
+<td>Can accelerate convergence</td>
+<td>Requires tuning of <span class="math inline">\(\omega\)</span></td>
+</tr>
+</tbody>
+</table>
+<hr />
+</div>
 <div id="conclusiones" class="section level3">
-<h3>3.4 Conclusiones</h3>
+<h3>6 Conclusiones</h3>
 <p>Los métodos directos son eficientes para sistemas pequeños y bien
 condicionados.</p>
 <p>Los métodos iterativos son preferidos en sistemas grandes y
