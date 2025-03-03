@@ -32,6 +32,10 @@ please have a look of this video before february 24th class
 
 https://www.youtube.com/watch?v=8BfLkQlqUoA&t=2s
 
+Draft class # 9
+
+https://trejoi.github.io/Numerical-Analysis-Class/Class_9_Spring_2025.html
+
 
 
 
