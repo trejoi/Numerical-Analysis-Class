@@ -448,8 +448,12 @@ que se conoce como número de condicionamiento de la matriz $A$.
 Nota:
 
 $$1=||I||=||A A^{-1}||\leq ||A||\ ||A^{-1}||=\kappa(A).$$
+Una matriz $A$ está bien condicionada si $\kappa(A)$ está cerca de 1 y está mal condicionada cuando $\kappa(A)$
+ es significativamente mayor que 1.  ver libro 359.
+ 
+Similarmente, el sistema $Ax=b$ es bien condicionadocon si el número de condición $\kappa(A)$ es pequeño. Si no se dice que el sistema esta mal condicionado.
 
-Una matriz $A$ está bien condicionada si $\kappa(A)$ está cerca de 1 y está mal condicionada cuando $\kappa(A)$ es significativamente mayor que 1.
+
 
 Generalemente, el número de condición se calculara con la $||\cdot||_{\infty}$.
 
@@ -528,26 +532,50 @@ El sistema lineal $Ax-b=0$ es equivalente al sistema $Bx+c=x$. Definiendo $G(x)=
 
 
 Definimos la sucesión $\{x^{(k)}\}^{\infty}_{k=1}$ de vectores en $\mathbb{R}^n$ con $x^{(0)}$ como
-$$x^{(k)}=Bx^{(k-1)}+c=G(x^{(k-1)})$$
+$$x^{(k)}=Tx^{(k-1)}+c=G(x^{(k-1)}).$$
+
 **Teorema de convergencia.**
-Sea $x^{(k)}$ sucesión definida por $x^{(k)}=Bx^{(k)}+c$ y $x$ es tal que $Bx+c=x$. Entonces si $||B||<1$  se tiene
-$$\lim_{k\to\infty}x^{(k)}=x.$$
-Nota: En el teorema de convergencia anterir, la conclusión implica ser cierta para cuando $\rho(A)<1$.
+Para cualquier $x^{(0)}\in \mathbb{R}^n$, la sucesión $$x^{(k)}=Tx^{(k-1)}+c \ \text{ para cada}\ k\geq 1,$$ converge a la solución única de $x=Tx+c$ si y solo si $\rho(A)<1$. 
+
+Dem. tarea
 
 Cota para hallar cierta exactitud en las iteraciones:
 
-$$||x^{0}-x||.$$
+
+**Corolario de convergencia.** 
+
+Si $||T||<1$  para toda norma matricial natural y si $c$ es un vector cualquiera, entonces la sucesión 
+$$x^{(k)}=Tx^{(k-1)}+c$$ converge a un vector $x\in \mathbb{R}^n$, para cualquier $x^{(0)}\in \mathbb{R}^n$ y las siguientes cotas de error son validas:
+
+$$(i) \ ||x-x^{(k)}||\leq ||T||^{k}||x^{(0)}-x||.$$
+$$(ii) \ ||x-x^{(k)}||\leq \frac{||T||^{k}}{1-||T||}||x^{(1)}-x^{(0)}||.$$
+Dem. tarea
+
+
+
 
 
 
 ### 3.3.1 Método de Jacobi
 
-El método de Jacobi es un método iterativo que separa la matriz en su parte diagonal y el resto.
+El método de Jacobi es un método iterativo que separa la matriz $A$ en su parte diagonal y el resto (Pizarrón). 
+
+Equivalentemente, el **método iterativo** es: 
+
+  $$
+  x_i^{(k+1)} = \frac{1}{a_{ii}} \left( b_i - \sum_{j \neq i} a_{ij} x_j^{(k)} \right)
+  $$
+    
+para cada \(i = 1, \dots, n\), donde \(a_{ii} \neq 0\) con un vector inicial dado $x^{0}$.
+
 
 
 A nice video for the class 
 
 https://www.youtube.com/watch?v=8BfLkQlqUoA&t=498s
+
+
+
 
 
 ### 3.3.2 Método de Gauss-Seydel  
@@ -556,16 +584,85 @@ https://www.youtube.com/watch?v=Pq0XOfk0XOA
 
 Este método es similar al de Jacobi, pero usa los valores actualizados de $x$ conforme se van calculando.
 
+**Método iterativo:**
 
-### 3.3.3 Método de SOR
+$$
+  x_i^{(k+1)} = \frac{1}{a_{ii}} \left( b_i - \sum_{j < i} a_{ij} x_j^{(k+1)} - \sum_{j > i} a_{ij} x_j^{(k)} \right)
+$$
+con un vector inicial $x^{0}$.
 
+### 3.3.3 (opcional) Método de SOR
 
+Es una extención del método de Gauss-Seidel, donde se introduce un parámetro de relajación $\omega$
+
+$$x_i^{(k+1)} = (1 - \omega) x_i^{(k)} + \frac{\omega}{a_{ii}} \left( b_i - \sum_{j < i} a_{ij} x_j^{(k+1)} - \sum_{j > i} a_{ij} x_j^{(k)} \right)$$
+  
+donde \(0 < \omega < 2\).
 
 ### 3.3.4 (opcional) Método del Gradiente Conjugado
 
 Este método es adecuado para sistemas dispersos y simétricos definidos positivos.
 
-### 3.4 Conclusiones
+
+### 3.3.5 LAB (implement an iterative method)
+
+```{r}
+
+#esta función hace la rutina de Jacobi
+
+jacobi <- function(A, b, tol = 1e-6, max_iter = 1000) {
+  n <- nrow(A)
+  x <- rep(0, n)  # Vector inicial de ceros
+  x_new <- rep(0, n)  # Vector para la nueva iteración
+  
+  for (k in 1:max_iter) {
+    for (i in 1:n) {
+      sum_ax <- sum(A[i, -i] * x[-i])  # Suma de los términos excepto el diagonal
+      x_new[i] <- (b[i] - sum_ax) / A[i, i]  # Nueva estimación
+    }
+    
+    # Criterio de convergencia
+    if (max(abs(x_new - x)) < tol) {
+      cat("Convergencia alcanzada en", k, "iteraciones\n")
+      return(x_new)
+    }
+    
+    x <- x_new  # Actualizar el vector de soluciones
+  }
+  
+  cat("No se alcanzó la convergencia en", max_iter, "iteraciones\n")
+  return(x_new)
+}
+
+# Ejemplo de uso:
+A <- matrix(c(4, -1, 0, -1,
+              -1, 4, -1, 0,
+              0, -1, 4, -1,
+              -1, 0, -1, 4), nrow=4, byrow=TRUE)
+
+b <- c(15, 10, 10, 15)
+
+sol <- jacobi(A, b)
+print(sol)
+
+solve(A,b)
+
+```
+
+
+
+### 4. Comparison
+  
+  | Method                  | Pros                       | Cons                                                  |
+  | ----------------------- | -------------------------- | ----------------------------------------------------- |
+  | **Jacobi Method**       | Simple, parallelizable     | Slow convergence, requires diagonally dominant matrix |
+  | **Gauss-Seidel Method** | Faster than Jacobi         | Not easily parallelizable                             |
+  | **SOR Method**          | Can accelerate convergence | Requires tuning of \(\omega\)                         |
+  
+  ---
+
+
+### 6 Conclusiones
 
 Los métodos directos son eficientes para sistemas pequeños y bien condicionados.
 
@@ -577,3 +674,5 @@ La elección del método depende del tamaño de la matriz, su estructura y la ne
 Ordenes de computo/costo computacional: 
 
 Factorización de Cholesky $O(\frac{n^2}{6})$
+
+
