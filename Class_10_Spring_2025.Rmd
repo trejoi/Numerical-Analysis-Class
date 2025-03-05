@@ -1,0 +1,345 @@
+---
+title: "Aproximación de Funciones"
+author: "Imelda Trejo"
+date: "2025-03-03"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+
+
+# Aproximación de Funciones
+
+
+
+## 1.1 Interpolación Polinomial
+
+Dado un conjunto de puntos coordenados
+\((x_i, y_i)\) con \(i = 1, \dots, n\),
+
+
+|         |     |     |     |     |     |
+|---      |-----|-----|-----|-----|-----|
+| \( x \) | \( x_1 \) | \( x_2 \) | \( x_3 \) | ... | \( x_n \) |
+| \( y \) | \( y_1 \) | \( y_2 \) | \( y_3 \) | ... | \( y_n \) |
+
+buscamos un polinomio \( p \) de grado menor posible tal que:
+\[
+p(x_i) = y_i, \quad \forall i = 1, \dots, n.
+\]
+
+Tal polinomio se dice que **interpola** los datos.
+
+**Teorema de Existencia y Unicidad:** Existe un único polinomio de grado a lo sumo \(n\) que interpola \(n+1\) puntos dados con abscisas distintas.
+
+Demostracion: unicidad usar pizarron. Existencia por construcci'on usando el polinomio interpolador de Lagrange.
+
+
+En la práctica, los datos pueden surgir de mediciones de un fenómeno físico o biológico. Así estos datos son variables aleatorias. Sin embargo, en nuestra clase supondremos que los datos provienen de una función \( f \) bien definida y con cierta propiedades, que genera los datos. Esto es 
+\[y_i=f(x_i) \quad \forall i = 1, \dots, n.
+\].
+
+
+## 1.2 Interpolación polinomial de Lagrange
+
+El **polinomio interpolador de Lagrange** se expresa como:
+
+\[ \tag{1}
+P_n(x) = \sum_{i=0}^{n} f(x_i) L_i(x)
+\]
+
+donde los **polinomios base de Lagrange** \( L_i(x) \) están dados por:
+
+\[
+L_i(x) = \prod_{\substack{j=0 \\ j\neq i}}^{n} \frac{x - x_j}{x_i - x_j}
+\]
+
+### Explicación:
+- \( P_n(x) \) es el polinomio interpolante de grado \( \leq n \).
+- \( x_0, x_1, \dots, x_n \) son los nodos de interpolación.
+- \( f(x_i) \) son los valores de la función en los nodos.
+- Cada \( L_i(x) \) es un polinomio que **vale 1 en \( x_i \) y 0 en los demás nodos \( x_j \)**, garantizando que \( P_n(x) \) interpole los datos exactamente.
+
+- \( f(x_i) \) son los valores de los coficientes de la combinaci'on lineal dada por la funciones  \( L_i(x) \), equacion \tag{1}.
+
+Ejemplo  1(libro). 
+Dado los puntos \( (2, 4) \) y \( (5, 1) \), encontrar el polinomio interpolante de Lagrange.
+
+El **polinomio interpolante de Lagrange** \( P_1(x) \) será:
+
+\[
+P_1(x) = f(x_0) L_0(x) + f(x_1) L_1(x)
+\]
+
+Donde los **polinomios base de Lagrange** son:
+
+\[
+L_0(x) = \frac{x - x_1}{x_0 - x_1} = \frac{x - 5}{2 - 5} = \frac{x - 5}{-3}
+\]
+
+\[
+L_1(x) = \frac{x - x_0}{x_1 - x_0} = \frac{x - 2}{5 - 2} = \frac{x - 2}{3}
+\]
+
+Sustituyendo en la fórmula del polinomio:
+
+\[
+P_1(x) = 4 \cdot \frac{x - 5}{-3} + 1 \cdot \frac{x - 2}{3}
+\]
+
+Simplificando:
+
+\[
+P_1(x) = \frac{-4(x - 5) + (x - 2)}{3}
+\]
+
+\[
+P_1(x) = -x + 6
+\]
+
+
+
+**Ventajas:** No requiere resolver sistemas de ecuaciones para hallar los cofientes de la ecuaci[on \tag{1}.
+
+**Cuándo usarlo:** Cuando se necesita una fórmula explícita del polinomio interpolador.
+
+**Coste computacional:** \(O(n^2)\) debido a la evaluación de los polinomios base.
+
+**Ejemplo:**
+Interpolar los puntos \((0,1), (1,2), (2,0)\) usando la forma de Lagrange.
+
+LAB. 
+
+**Ejemplo:**
+Interpolar los puntos \((1,2), (2,3), (3,5)\) con un polinomio de grado 2.
+
+Grafica los 2 polinomios de Lagrange usando datos
+
+
+
+## 1.3 Polinomio Interpolante de Newton
+
+El **polinomio interpolante de Newton** tiene la siguiente forma:
+
+\[ \tag{2}
+P_n(x) =  \sum_{i=0}^{n} c_i q_i(x)
+\]
+donde la base de funciones \(q_i(x)\) se construye de la siguiente manera:
+
+1. **Función base de orden 0**: \( 1 \)
+   
+2. **Función base de orden 1**: \( (x - x_0) \)
+   
+3. **Función base de orden 2**: \( (x - x_0)(x - x_1) \)
+   
+4. **Función base de orden 3**: \( (x - x_0)(x - x_1)(x - x_2) \)
+   
+Y así sucesivamente, cada término es el producto de factores \( (x - x_k) \) donde \( k = 0, 1, \dots, i-1 \).
+
+La **base de funciones** en general es:
+
+\[
+\{ 1, (x - x_0), (x - x_0)(x - x_1), \dots, (x - x_0)(x - x_1) \dots (x - x_{n-1}) \}
+\]
+
+### Cálculo de las Diferencias Divididas
+Un caso particular del polinomio interpolador de Newton es 
+
+\[
+P_n(x) = f(x_0) \cdot 1 + f[x_0, x_1] \cdot (x - x_0) + f[x_0, x_1, x_2] \cdot (x - x_0)(x - x_1) + \cdots + f[x_0, x_1, \dots, x_n] \cdot (x - x_0)(x - x_1) \cdots (x - x_{n-1})
+\]
+
+Aqu'i los coeficientes del **polinomio interpolante de Newton** se construye utilizando **diferencias divididas** y tiene la siguiente forma:
+
+1. \( f[x_0] = y_0 \)
+   
+2. \( f[x_0, x_1] = \frac{y_1 - y_0}{x_1 - x_0} \)
+   
+3. \( f[x_0, x_1, x_2] = \frac{f[x_1, x_2] - f[x_0, x_1]}{x_2 - x_0} \)
+   
+4. \( f[x_0, x_1, x_2, x_3] = \frac{f[x_1, x_2, x_3] - f[x_0, x_1, x_2]}{x_3 - x_0} \)
+
+Y así sucesivamente. Estas diferencias divididas se calculan de manera iterativa.
+
+### Ejemplo:
+
+Supongamos que tenemos 4 puntos de datos \( (x_0, y_0), (x_1, y_1), (x_2, y_2), (x_3, y_3) \), el **polinomio de interpolación de Newton** será:
+
+\[
+P_3(x) = f(x_0) \cdot 1 + f[x_0, x_1] \cdot (x - x_0) + f[x_0, x_1, x_2] \cdot (x - x_0)(x - x_1) + f[x_0, x_1, x_2, x_3] \cdot (x - x_0)(x - x_1)(x - x_2)
+\]
+
+Las diferencias divididas se calcularán como:
+
+\[
+f[x_0] = y_0, \quad f[x_0, x_1] = \frac{y_1 - y_0}{x_1 - x_0}, \quad f[x_0, x_1, x_2] = \frac{f[x_1, x_2] - f[x_0, x_1]}{x_2 - x_0}, \quad \dots
+\]
+
+
+
+
+**Ventajas:** Permite agregar puntos sin recalcular toda la interpolación.
+
+**Cuándo usarlo:** Cuando se agregan puntos de manera incremental.
+
+**Coste computacional:** \(O(n^2)\) en la construcción, pero más eficiente que Lagrange para cálculos sucesivos.
+
+
+
+## 1.4 Interpolacion con un polinomio en su forma compacta. 
+
+Para los \( n+1 \) puntos \( (x_0, y_0), (x_1, y_1), \dots, (x_n, y_n) \) el polinomio de grado \( n \) que interpole estos puntos en su forma general del polinomio es:
+
+\[
+P(x) = a_0 + a_1 x + a_2 x^2 + \cdots + a_n x^n
+\]
+
+donde \( a_0, a_1, \dots, a_n \) son los coeficientes que debemos determinar.
+
+La **base de funciones** en general es:
+
+\[
+\{ 1, x, x2, \dots, xn \}
+\]
+
+**Matriz de Vandermonde**
+
+Para determinar estos coeficientes, sustituimos los puntos \( (x_i, y_i) \) en la ecuación del polinomio, lo que nos lleva al siguiente sistema de ecuaciones lineales:
+
+\[
+\begin{aligned}
+P(x_0) &= y_0 = a_0 + a_1 x_0 + a_2 x_0^2 + \cdots + a_n x_0^n \\
+P(x_1) &= y_1 = a_0 + a_1 x_1 + a_2 x_1^2 + \cdots + a_n x_1^n \\
+&\vdots \\
+P(x_n) &= y_n = a_0 + a_1 x_n + a_2 x_n^2 + \cdots + a_n x_n^n
+\end{aligned}
+\]
+
+Este sistema es un sistema linear que se puede escribir de forma matricial como:
+
+\[
+\begin{bmatrix}
+1 & x_0 & x_0^2 & \cdots & x_0^n \\
+1 & x_1 & x_1^2 & \cdots & x_1^n \\
+1 & x_2 & x_2^2 & \cdots & x_2^n \\
+\vdots & \vdots & \vdots & \ddots & \vdots \\
+1 & x_n & x_n^2 & \cdots & x_n^n
+\end{bmatrix}
+\begin{bmatrix}
+a_0 \\
+a_1 \\
+a_2 \\
+\vdots \\
+a_n
+\end{bmatrix}
+=
+\begin{bmatrix}
+y_0 \\
+y_1 \\
+y_2 \\
+\vdots \\
+y_n
+\end{bmatrix}
+\]
+
+La matriz que aparece en este sistema es la \textbf{matriz de Vandermonde}, y tiene la forma:
+
+\[
+V(x_0, x_1, \dots, x_n) =
+\begin{bmatrix}
+1 & x_0 & x_0^2 & \cdots & x_0^n \\
+1 & x_1 & x_1^2 & \cdots & x_1^n \\
+1 & x_2 & x_2^2 & \cdots & x_2^n \\
+\vdots & \vdots & \vdots & \ddots & \vdots \\
+1 & x_n & x_n^2 & \cdots & x_n^n
+\end{bmatrix}
+\]
+
+Esta matriz es de tamaño \( (n+1) \times (n+1) \), y cada fila \( i \)-ésima de la matriz corresponde a los valores \( x_i \) elevados a las potencias de 0 a \( n \). 
+
+La matriz es invertible si y solo si los puntos \( x_0, x_1, \dots, x_n \) son distintos entre sí (por el Teorema 1: existencia y unicidad). En general es una matris mal condicionada (ill conditioning) por lo que los coeficientes $a_i$ pueden tener error y esta tecnica de interpolaci'on no es muy usada.
+
+
+**Ventajas:** Representación matricial bien definida (pero quiza mal condicionada, tener cuidado).
+
+**Cuándo usarlo:** En problemas donde se pueden aprovechar propiedades algebraicas.
+
+**Coste computacional:** \(O(n^3)\) debido a la resolución de sistemas lineales.
+
+**Ejemplo (tarea):**
+Resolver el sistema generado por la interpolación de \((1,1), (2,4), (3,9)\) usando la matriz de Vandermonde.
+
+### Error de Interpolación
+
+El error de interpolación está dado por:
+\[
+E(x) = f(x) - p(x) = \frac{f^{(n)}(\xi)}{n!} \prod_{i=1}^{n} (x - x_i), \quad \xi \in [a, b].
+\]
+
+
+
+## 1.5 Interpolación de Hermite
+
+**Ventajas:** Incluye información de derivadas, mejorando la precisión.
+
+**Cuándo usarlo:** Cuando se dispone de valores de derivadas junto con los puntos.
+
+**Coste computacional:** \(O(n^2)\) en diferencias divididas modificadas.
+
+**Ejemplo:**
+Construir el polinomio de Hermite para \((1,2,3)\) con derivadas \((1,0,-1)\).
+
+## 1.6 Interpolación con Splines
+
+**Ventajas:** Evita oscilaciones en polinomios de alto grado.
+
+**Cuándo usarlo:** Cuando se necesita suavidad entre segmentos.
+
+**Coste computacional:** \(O(n)\) para la construcción y evaluación.
+
+**Ejemplo:**
+Construir un spline cúbico para los puntos \((0,1), (1,2), (2,0)\).
+
+## 1.7 Interpolación Trigonométrica
+
+**Ventajas:** Ideal para datos periódicos.
+
+**Cuándo usarlo:** Cuando los datos se repiten en intervalos regulares.
+
+**Coste computacional:** \(O(n \log n)\) si se usa FFT.
+
+**Ejemplo:**
+Interpolar la función \(f(x) = \cos(x)\) en los puntos \(x = 0, \pi/2, \pi, 3\pi/2\).
+
+## 1.8 Transformada Rápida de Fourier (FFT)
+
+**Ventajas:** Método eficiente para representar datos en el dominio de la frecuencia.
+
+**Cuándo usarlo:** Para análisis espectral y procesamiento de señales.
+
+**Coste computacional:** \(O(N \log N)\), mucho más rápido que la DFT estándar.
+
+**Ejemplo:**
+Aplicar la FFT a la señal \( x = [1, 2, 3, 4] \).
+
+## Proyecto para el laboratorio (2 horas)
+
+### Objetivo:
+Implementar diferentes métodos de interpolación en un conjunto de datos dados.
+
+### Actividades:
+1. Implementar la interpolación polinomial usando Lagrange y Newton.
+2. Comparar los resultados con el spline cúbico.
+3. Aplicar la interpolación trigonométrica en datos periódicos.
+4. Evaluar los errores en cada caso y discutir las ventajas de cada método.
+
+### Entregables:
+- Código en R o Python.
+- Informe con análisis y conclusiones sobre la interpolación aplicada.
+
+Este laboratorio permitirá consolidar los conocimientos adquiridos y explorar aplicaciones prácticas de los métodos de interpolación.
