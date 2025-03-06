@@ -555,7 +555,7 @@ P(x) = a_0 + a_1 x + a_2 x^2 + \cdots + a_n x^n
 los coeficientes que debemos determinar.</p>
 <p>La <strong>base de funciones</strong> en general es:</p>
 <p><span class="math display">\[
-\{ 1, x, x2, \dots, xn \}
+\{ 1, x, x^2, \dots, x^n \}
 \]</span></p>
 <p><strong>Matriz de Vandermonde</strong></p>
 <p>Para determinar estos coeficientes, sustituimos los puntos <span class="math inline">\((x_i, y_i)\)</span> en la ecuación del polinomio,
@@ -609,9 +609,9 @@ V(x_0, x_1, \dots, x_n) =
 (n+1)\)</span>, y cada fila <span class="math inline">\(i\)</span>-ésima
 de la matriz corresponde a los valores <span class="math inline">\(x_i\)</span> elevados a las potencias de 0 a <span class="math inline">\(n\)</span>.</p>
 <p>La matriz es invertible si y solo si los puntos <span class="math inline">\(x_0, x_1, \dots, x_n\)</span> son distintos entre
-sí (por el Teorema 1: existencia y unicidad). En general es una matris
-mal condicionada (ill conditioning) por lo que los coeficientes <span class="math inline">\(a_i\)</span> pueden tener error y esta tecnica de
-interpolaci’on no es muy usada.</p>
+sí (por el Teorema 1: existencia y unicidad). En general es una matriz
+mal condicionada (ill conditioning) por lo que los coeficientes <span class="math inline">\(a_i\)</span> pueden tener error. No recomendada
+para sistemas grandes.</p>
 <p><strong>Ventajas:</strong> Representación matricial bien definida
 (pero quiza mal condicionada, tener cuidado).</p>
 <p><strong>Cuándo usarlo:</strong> En problemas donde se pueden
