@@ -204,7 +204,7 @@ donde \( a_0, a_1, \dots, a_n \) son los coeficientes que debemos determinar.
 La **base de funciones** en general es:
 
 \[
-\{ 1, x, x2, \dots, xn \}
+\{ 1, x, x^2, \dots, x^n \}
 \]
 
 **Matriz de Vandermonde**
@@ -262,7 +262,7 @@ V(x_0, x_1, \dots, x_n) =
 
 Esta matriz es de tamaño \( (n+1) \times (n+1) \), y cada fila \( i \)-ésima de la matriz corresponde a los valores \( x_i \) elevados a las potencias de 0 a \( n \). 
 
-La matriz es invertible si y solo si los puntos \( x_0, x_1, \dots, x_n \) son distintos entre sí (por el Teorema 1: existencia y unicidad). En general es una matris mal condicionada (ill conditioning) por lo que los coeficientes $a_i$ pueden tener error y esta tecnica de interpolaci'on no es muy usada.
+La matriz es invertible si y solo si los puntos \( x_0, x_1, \dots, x_n \) son distintos entre sí (por el Teorema 1: existencia y unicidad). En general es una matriz mal condicionada (ill conditioning) por lo que los coeficientes $a_i$ pueden tener error. No recomendada para sistemas grandes.
 
 
 **Ventajas:** Representación matricial bien definida (pero quiza mal condicionada, tener cuidado).
@@ -343,3 +343,4 @@ Implementar diferentes métodos de interpolación en un conjunto de datos dados.
 - Informe con análisis y conclusiones sobre la interpolación aplicada.
 
 Este laboratorio permitirá consolidar los conocimientos adquiridos y explorar aplicaciones prácticas de los métodos de interpolación.
+
