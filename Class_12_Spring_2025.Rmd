@@ -1,0 +1,360 @@
+---
+title: "Mejor approximación: teoría de mínimos cuadrados"
+author: "Imelda Trejo"
+date: "2025-March-11"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Teoría de aproximación (mínimos cuadrados)
+
+ver libro, Capítulo 8, página 378.
+
+https://heavyphysicsblog.wordpress.com/wp-content/uploads/2019/06/analisis-numerico-burden-faires-10ed.pdf
+
+Esta teoría es clave para la aproximación por polinomios trigonometricos (series de Fourier), y otros métodos numéricos de aproximación que describiremos en esta sección.
+
+En  Big Data, tiene aplicaciones especialmente en áreas como reducción de dimensionalidad, análisis de datos, aprendizaje automático y procesamiento de señales. 
+
+
+
+## Problema clásico de mejor aproximación
+
+Sean \( f \) una función continua en \([a,b]\) y \( n \) un entero positivo fijo. Buscamos un polinomio \( p \) de grado a lo más \( n \) tal que minimice la discrepancia (desviación) con \( f \), medida mediante alguna norma.
+
+Por ejemplo, la discrepancia (error) puede medirse con la norma máximo:
+\[
+||f(x)-p(x)|| = \max_{x \in [a,b]} |f(x)-p(x)|.
+\]
+Este problema es diferente a interpolar \( f \) en algunos nodos y es muy diferente a truncar el polinomio de Taylor de \( f \) hasta el grado \( n \), cuando éste existe.
+
+A continuación se presentan teoremas generales de existencia y unicidad para tales polinomios.
+
+### Definición de distancia
+
+Considere un espacio vectorial lineal normado \( H \) y un subespacio vectorial \( G \) de \( H \). Para cualquier \( f \in E \), la *distancia* de \( f \) a \( G \) se define como
+\[
+\text{dis}(f,G) = \inf_{g \in G} ||f-g||,
+\]
+donde \( ||f-g|| \) es la norma de la diferencia entre \( f \) y cualquier elemento \( g \) del subespacio \( G \). Esta fórmula mide la desviación mínima que podemos esperar al aproximar el vector \( f \) por elementos de \( G \).
+
+Si existe un elemento \( g \in G \) donde se alcanza ese ínfimo, es decir,
+\[
+||f-g|| = \text{dis}(f,G),
+\]
+entonces \( g \) minimiza la desviación y se dice que \( g \) es **la mejor aproximación** de \( f \) en \( G \).
+
+Por lo tanto, la mejor aproximación depende de la definición de la norma.
+
+### Teorema de existencia de la mejor aproximación
+
+El siguiente teorema demuestra la existencia de la mejor aproximación en espacios normados:
+
+**Teorema (Existencia)**: Si \( G \) es un subespacio cerrado de un espacio normado \( H \), entonces para todo \( f \in H \), existe un \( g \in G \) tal que
+\[
+||f - g|| = \text{dis}(f, G). 
+\]
+Es decir, siempre podemos encontrar una aproximación de \( f \) en \( G \) que minimiza el error de approximación (la norma de la diferencia).
+
+A esa función $g$ del teorema se llama **la mejor aproximación de $f$ en $G$**.
+
+Demostración (ver segundo libro de referencia de clase, Kincaid pag 359, o algún otro libro de análisis funcional).
+
+subespacio cerrado: contiene al cero y es cerrado bajo sumas y multiplicación por escalar.
+
+### Unicidad de la mejor aproximación
+
+Sin embargo, la mejor aproximación no necesariamente es única. Dependiendo de la norma y el espacio considerado, puede haber más de una aproximación que minimice la desviación. Esto ocurre principalmente cuando el espacio de aproximación no es de dimensión finita.
+
+### Resolución de la mejor aproximación en espacios con producto interno
+
+Encontrar la mejor aproximación no es un problema fácil. Generalmente, involucra resolver sistemas no lineales. Sin embargo, hay casos más sencillos donde se resuelven con sistemas lineales. Este es el caso cuando \( H \) es un **espacio vectorial con producto interno.**
+
+Si \( H \) es un espacio vectorial con producto interno, el problema de la mejor aproximación se puede resolver de forma más directa. La teoría de la **proyección ortogonal** garantiza que la mejor aproximación es única, y podemos encontrarla mediante un sistema lineal, lo que simplifica significativamente la resolución.
+
+
+---
+
+### Espacios con Producto Interno
+
+Un **espacio vectorial con producto interno** es un espacio vectorial \( H \) sobre el cuerpo de los números reales o complejos, con un producto interno definido en él.  Un producto interno es una función 
+\[
+\langle \cdot, \cdot \rangle : H \times H \to \mathbb{R} \quad \text{o} \quad \mathbb{C}
+\]
+que cumple las siguientes propiedades para todo \( u, v, w \in H \) y \( \alpha \in \mathbb{R} \) (o \( \mathbb{C} \)):
+
+1. **Linealidad en el primer argumento**:
+   \[
+   \langle \alpha u + v, w \rangle = \alpha \langle u, w \rangle + \langle v, w \rangle
+   \]
+   
+2. **Conjugación simétrica** (en el caso real es simplemente simetría):
+   \[
+   \langle u, v \rangle = \overline{\langle v, u \rangle}
+   \]
+   
+3. **Positividad**:
+   \[
+   \langle u, u \rangle \geq 0 \quad \text{y} \quad \langle u, u \rangle = 0 \text{ si y solo si } u = 0.
+   \]
+
+Estas propiedades aseguran que el producto interno permite medir la longitud de los vectores (mediante la norma) y el ángulo entre ellos. 
+
+
+La **norma inducida** por el producto interno  se define como:
+\[
+||v|| = \sqrt{\langle v, v \rangle}.
+\]
+
+Esta norma cumple con las propiedades usuales de una norma (positividad, homogeneidad y desigualdad triangular), ver clases anteriores.
+
+
+La definición de ángulo, nos permite hablar de perpendicularidad (ortoganalidad) entre vectores.
+
+
+### Sistema Ortogonal
+
+El conjunto de vectores \( \{ \phi_1, \phi_2, \dots, \phi_n \} \) es un conjunto de vectores (funciones) ortogonales si:
+
+\[
+\langle \phi_i, \phi_j \rangle = 0 \quad \text{para} \quad i \neq j.
+\]
+
+### Sistema Ortonormal
+
+El sistema es ortonormal si el sistema es ortogonal y además cada vector (o función) tiene norma igual a 1. Es decir:
+
+\[
+||\phi_i|| = 1 \quad \text{para todo} \quad i.
+\]
+
+### Teorema (Existencia y unicidad de la mejor aproximación)
+
+Sea \( \{ \phi_1, \phi_2, \dots, \phi_n \} \) un sistema ortonormal en un espacio con producto interno \( H \). La mejor aproximación de \( f \) por un elemento de la forma \( \sum c_i \phi_i \) es obtenida si y solo si \( c_i = \langle f, \phi_i \rangle \).
+
+Dem. Se demostro en la clase pasada.
+
+---
+
+Por lo tanto, si uno desea aproximar elementos de \( H \) por elementos de un subespacio \( G \) de dimensiòn finita (o infinita), primero se debe obtener una base ortonormal. Luego, la mejor aproximación es:
+
+\[
+g(x) = \sum^n_{i=0} \langle f, \phi_i \rangle \phi_i(x).
+\]
+
+#### Consecuencia del Teorema de Mejor Aproximación
+
+Como consecuencia del teorema de **existencia y unicidad de la mejor aproximación**, se obtiene que el **polinomio que mejor aproxima** a una función \( f \) en un espacio vectorial con producto interno es aquel que se expresa en términos de una **base ortonormal** de polinomios \( \{ \phi_0, \phi_1, \dots, \phi_n \} \).
+
+Dado un espacio de funciones con un producto interno definido, la mejor aproximación de \( f \) por un polinomio de grado a lo más \( n \) es:
+
+\[
+p_n(x) = \sum_{i=0}^{n} \langle f, \phi_i \rangle \phi_i(x).
+\]
+
+Donde los coeficientes se obtienen mediante el producto interno:
+
+\[
+c_i = \langle f, \phi_i \rangle.
+\]
+
+Este resultado se aplica, por ejemplo, en la **aproximación polinómica de funciones mediante polinomios ortogonales**, como los **polinomios de Legendre, Chebyshev, Hermite o Laguerre**.
+
+Ver otras consecuencias inmediatas: Teorema 8.6 del libro
+
+https://heavyphysicsblog.wordpress.com/wp-content/uploads/2019/06/analisis-numerico-burden-faires-10ed.pdf
+
+
+Acontinuación presentaremos algunos de estos polinomio, pero antes recordemos algunos productos internos. 
+
+---
+
+#### Producto Interno en \( \mathbb{R}^n \)
+
+En el espacio euclidiano \( \mathbb{R}^n \), el producto interno entre dos vectores \( \mathbf{u} = (u_1, u_2, \dots, u_n) \) y \( \mathbf{v} = (v_1, v_2, \dots, v_n) \) se define como:
+\[
+\langle \mathbf{u}, \mathbf{v} \rangle = u_1 v_1 + u_2 v_2 + \dots + u_n v_n = \sum_{i=1}^n u_i v_i.
+\]
+La norma inducida es entonces:
+\[
+||\mathbf{u}|| = \sqrt{\langle \mathbf{u}, \mathbf{u} \rangle} = \sqrt{u_1^2 + u_2^2 + \dots + u_n^2}.
+\]
+
+---
+
+#### Producto Interno en el Espacio de Funciones Continuas \( C_w([a,b]) \)
+
+ver pag 390 del libro
+
+https://heavyphysicsblog.wordpress.com/wp-content/uploads/2019/06/analisis-numerico-burden-faires-10ed.pdf
+
+
+Si \( f \) y \( g \) son funciones continuas en \( [a,b] \) su producto interno es:
+
+\[
+\langle f, g \rangle_w = \int_a^b f(x) g(x) w(x) \, dx.
+\]
+
+con \( w(x)>0\) una función continua fija. $w(x)$ puede interpretarse como una función que pondera el valor de las funciones \( f(x) \) y \( g(x) \) en el punto \( x \), modificando la "importancia" de las evaluaciones de \( f \) y \( g \) en las distintas partes del intervalo \( [a,b] \).
+
+La norma inducida por este prodcto interno es :
+\[
+\| f \|_2 = \left( \int_a^b |f(x)|^2 w(x) \,dx \right)^{\frac{1}{2}}.
+\]
+
+
+Para el caso cuando $w(x)=1$, el producto interno es:
+\[
+\langle f, g \rangle = \int_a^b f(x) g(x) \, dx.
+\]
+y la norma inducida en este espacio es:
+\[
+||f||_2 = \sqrt{\langle f, f \rangle} = \sqrt{\int_a^b f(x)^2 \, dx}.
+\]
+
+Esta norma es la norma \( L^2 \) (también conocido como el espacio de funciones cuadrado integrables) que está definido a partir de la integral de Lebesgue y la relación de equivalencia "casi en todas partes".
+
+Como estamos trabajando con funciones continuas y definidas en un intervalo compacto $[a,b]$,  
+la integral de Lebesgue coincide con la integral de Riemann. Por lo que no nos preocuparemos por la integral de Lebesgue.
+
+---
+
+### Ejemplo de sistemas ortogonales (con la norma dada por integrales)
+
+#### 1. Polinomios de Legendre
+
+Los **polinomios de Legendre** \( P_n(x) \) son ortogonales en el intervalo \( [-1,1] \) con la función peso \( w(x) = 1 \), es decir,
+
+\[
+\int_{-1}^{1} P_m(x) P_n(x) \,dx = 0, \quad \text{si } m \neq n.
+\]
+
+Los primeros polinomios de Legendre son:
+
+\[
+P_0(x) = 1, \quad P_1(x) = x, \quad P_2(x) = \frac{1}{2} (3x^2 - 1), \quad P_3(x) = \frac{1}{2} (5x^3 - 3x).
+\]
+
+#usados en ecuaciones diferenciales
+
+---
+
+#### 2. Polinomios de Chebyshev
+
+Los **polinomios de Chebyshev** \( T_n(x) \) son ortogonales en \( [-1,1] \) con la función peso \( w(x) = \frac{1}{\sqrt{1-x^2}} \), es decir,
+
+\[
+\int_{-1}^{1} T_m(x) T_n(x) \frac{dx}{\sqrt{1-x^2}} = 0, \quad \text{si } m \neq n.
+\]
+
+Los primeros polinomios de Chebyshev son:
+
+\[
+T_0(x) = 1, \quad T_1(x) = x, \quad T_2(x) = 2x^2 - 1, \quad T_3(x) = 4x^3 - 3x.
+\]
+
+Estos polinomios son ampliamente utilizados en **aproximaciones numéricas y compresión de datos** debido a sus buenas propiedades de convergencia.
+
+---
+
+### 3. Funciones Trigonométricas (Serie de Fourier)
+
+El sistema de funciones trigonométricas
+
+\[
+\{1, \cos(n\pi x), \sin(n\pi x)\}, \quad n \geq 1,
+\]
+
+es ortogonal en \( [-1,1] \) con la función peso \( w(x) = 1 \), es decir,
+
+\[
+\int_{-1}^{1} \cos(m\pi x) \cos(n\pi x) \,dx = 0, \quad \text{si } m \neq n.
+\]
+
+Las funciones trigonométricas se utilizan en la **descomposición de señales y procesamiento de datos (Fourier Transform)**.
+
+---
+
+
+### Mejor approximción de Funciones: Norma \( L^2 \)
+
+Sea \( f \) una función continua en el intervalo \( [a,b] \). Queremos encontrar un polinomio \( p_n(x) \) de grado a lo más \( n \) que minimice el error en la norma \( L^2 \):
+
+\[
+||f-p_n||^2_2 = \int_a^b (f(x) - p_n(x))^2 w(x) \,dx,
+\]
+
+donde \( w(x) \) es una función de peso positiva. La mejor aproximación en este sentido se obtiene proyectando \( f \) sobre una base **ortogonal** de polinomios \( \{\phi_0(x), \phi_1(x), \dots, \phi_n(x)\} \), de manera que:
+
+\[
+p_n(x) = \sum_{k=0}^{n} c_k \phi_k(x),
+\]
+
+donde los coeficientes están dados por:
+
+\[
+c_k = \frac{\int_a^b f(x) \phi_k(x) w(x) \,dx}{\int_a^b \phi_k^2(x) w(x) \,dx}.
+\]
+
+Si \( w(x) = 1 \), los polinomios ortogonales pueden construirse mediante el **proceso de Gram-Schmidt** aplicado a \( \{1, x, x^2, \dots\} \).
+
+Los polinomios *ortogonales* que resultan del proceso de Gram-Schmidt aplicado a la base ${1,x,x_2,\dots, x_n}$ con la función peso 
+$w(x)=1$ en el intervalo $[−1,1]$ son precisamente los polinomios de Legendre. 
+
+
+Ejemplo: determinar la mejor approximación de $sen(x)$ por el polinomio $g(x)=a_0+a_1x^3+a_2x^2$, usando polinomios de Legendre.
+
+El polinomio de aproximcion es:
+  
+  $$
+  g(x) = c_0 P_0(x) + c_1 P_3(x) + c_2 P_2(x).
+$$
+donde estos polinomios son de Legendre definidos en \([-1,1]\):
+  
+  $$
+  P_0(x) = 1, \quad P_1(x) = x, \quad P_2(x) = \frac{1}{2} (3x^2 -1), \quad P_3(x) = \frac{1}{2} (5x^3 - 3x).
+$$
+
+
+Los coeficientes se calculan como:
+  
+$$
+  c_k = \frac{\int_{-1}^{1} \sin(x) P_k(x) dx}{\int_{-1}^{1} P_k^2(x) dx}.
+$$
+Calculamos los coeficientes \(c_0, c_1\) y \(c_2\) resolviendo las integrales, nos da.
+ 
+```{r}    
+
+# Definir los polinomios de Legendre
+P0 <- function(x) { 1 }
+P2 <- function(x) { (3*x^2 - 1)/2 }
+P3 <- function(x) { (5*x^3 - 3*x)/2 }
+
+# Integración numérica con la regla del trapecio
+integrate_legendre <- function(f, P) {
+  integrate(function(x) f(x) * P(x), -1, 1)$value
+}
+
+# Cálculo de los coeficientes
+f <- function(x) sin(x)
+
+#c0 <- integrate_legendre(f, P0) / integrate_legendre(P0, P0)
+
+c0 <- integrate_legendre(f, P0) 
+c2 <- integrate_legendre(f, P2) / integrate_legendre(P2, P2)
+c3 <- integrate_legendre(f, P3) / integrate_legendre(P3, P3)
+
+# Construcción del polinomio aproximado
+g <- function(x) c0*P0(x) + c2*P2(x) + c3*P3(x)
+
+print(c(c0,c2,c3))
+
+
+```
+
+
+8.1  Aproximación por mínimos cuadrados discretos (tarea) pag 370 del libro.
+
