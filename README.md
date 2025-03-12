@@ -44,6 +44,10 @@ Draft class # 10 and #11
 
 https://trejoi.github.io/Numerical-Analysis-Class/Class_10_11_Spring_2025.html
 
+Draft class # 12
+
+https://trejoi.github.io/Numerical-Analysis-Class/Class_12_Spring_2025.html
+
 
 
 
