@@ -49,7 +49,13 @@ Draft class # 12
 https://trejoi.github.io/Numerical-Analysis-Class/Class_12_Spring_2025.html
 
 
+Draft class # 15 and 16
 
+https://trejoi.github.io/Numerical-Analysis-Class/Class_15_16_Metodo_Potencia_Potencia_Inversa.html
+
+Draft class # 17 
+
+https://trejoi.github.io/Numerical-Analysis-Class/Class_17_Metodo_de_Rayleigh.html
 
 
    
