@@ -1,0 +1,236 @@
+---
+title: "Análisis Numérico I, Primavera 2025"
+subtitle: "Análisis Numérico, R. L. Burden y J. D. Faires, ed. 10."
+author: "Instructor: Imelda Trejo"
+date: "Last update: 2025-April-02"
+output: 
+  html_document: 
+    toc: true
+    toc_depth: 3
+    toc_float: true
+    code_folding: hide
+
+---
+
+# 5 Valores y Vectores propios
+
+En nuestro libro de clase, este tema se expone en el Capitulo 9. pag. 430
+
+https://heavyphysicsblog.wordpress.com/wp-content/uploads/2019/06/analisis-numerico-burden-faires-10ed.pdf
+
+
+## 5.4 Algoritmo QR 
+
+El **método QR** es un algoritmo iterativo para calcular los **valores propios** de una matriz cuadrada. Se basa en la **factorización QR**, donde en cada iteración la matriz se transforma para converger a una forma triangular superior. Acontinuación presentamos la factorización $QR$.
+
+
+
+## **Factorización QR - usando el métodos de Gram-Schmidt clásico**
+Existen diferentes algoritmos para factorizar una matriz en su forma $QR$. Estos son Gram-Schmidt clásico, Gram-Schmidt modificado, Householder y Givens. A continuación presentamos la primera alternativa por simplicidad en la exposición, ver libro de clase y otras referecias para los otros algoritmos. 
+
+
+### **1. Introducción a la Descomposición QR**
+La factorización QR permite escribir una matriz \( A \) de dimensión \( m \times n \)  como el producto:
+
+\[ A = QR \]
+
+donde:
+
+- \( Q \) es una matriz **ortonormal** (\( Q^T Q = I \)).
+- \( R \) es una matriz **triangular superior**.
+
+ **¿Por qué es útil la factorización QR?**
+ 
+- Resolver sistemas sobredeterminados (\( Ax = b \), con \( m > n \)) mediante mínimos cuadrados.
+- Método QR para calcular autovalores.
+
+---
+
+### **2. Algoritmo de factorización QR**
+
+Sea \( A = [a_1, a_2, ..., a_n] \) una matriz de dimensión \( m \times n \), con rango completo (número de filas no nulas). Supongamos que el rango es $s$, usar $s$ columnas $a_j$ de $A$ tal que sea un conjunto linealmente independiente.
+
+
+1. Aplicamos el método de Gram-Schmidt al conjunto linealmente independiente $\{a_1, a_2, ..., a_s\}$ para obtener el conjunto ortonormal $\{q_1, q_2, ..., q_s\}$.
+2. Construimos la matriz \( Q = [q_1, q_2, ..., q_s] \) con el cojunto ortonormal. 
+2. Luego, obtenemos $R$ despejando de la equación $A=QR$. Esto es, $$R=Q^tA.$$
+
+
+Lo anterior, se puede hacer, porque las columnas de $Q$ son ortonormales. Luego,  $Q^tQ=I$, es decir $Q^t$ es la matriz inversa por la izquierda de $Q$. Por lo tanto,
+
+$$A=QR \implies Q^tA=Q^tQR=R$$
+
+Notemos que las dimensiones de $Q$ es $m\times n$, mientra que de $R$ es $n\times n$, cuando $m>n$ y $A$ de rango $n$.
+
+# Método QR para Cálculo de Valores Propios
+
+
+## Algoritmo
+
+1. **Inicialización**: Definir la matriz \( A_0 = A \).
+2. **Iteración**:
+   - Calcular  \( A_k = Q_k R_k \), la descomposición $QR$ de $A_k$.
+   - Actualizar \( A_{k+1} = R_k Q_k \).
+   - Verificar convergencia.
+3. **Salida**: La diagonal de \( A_k \) contiene los valores propios.
+
+---
+
+**Justificación del algoritmo.**
+
+Sea $A$ una matriz cuadrada no singular. Enonces $A=QR$ y es similar a la matriz $RQ$.
+
+Demostración:
+$$RQ=IRQ=Q^tQRQ=Q^t(QR)Q=Q^{-1}AQ.$$
+
+
+Para una matriz cuadrada $A$ no singular,  el algoritmo $QR$ genera una cadena de matrices semejantes que tienen los mismos valores propios. Si, el algoritmo converge, este converge a una matriz triangular superior $T$. Así, $A$  y $T$ tienen los mismos valores propios. Para la prueba ver por ejemplo, Rainer Kress,  (1998), **Numerical Analysis**.
+
+
+---
+
+## Ejemplo numérico usando el Método de Gram-Schmidt Clásico
+
+Aplicar el método $QR$ con tres iteraciones para estimar los valores propios de la matriz:
+\[
+A =
+\begin{bmatrix}
+2 & 1 \\
+1 & 2
+\end{bmatrix}
+\]
+
+---
+
+
+### **Paso 1: Primera Iteración**
+Para \( A_0 = A \), obtenemos:
+
+\[
+Q_0 =
+\begin{bmatrix}
+\frac{2}{\sqrt{5}} & -\frac{1}{\sqrt{5}} \\
+\frac{1}{\sqrt{5}} & \frac{2}{\sqrt{5}}
+\end{bmatrix},
+\quad
+R_0 =
+\begin{bmatrix}
+\sqrt{5} & \frac{4}{\sqrt{5}} \\
+0 & \frac{3}{\sqrt{5}}
+\end{bmatrix}
+\]
+
+\[
+A_1 = R_0 Q_0 =
+\begin{bmatrix}
+3.4 & 0.6 \\
+0.6 & 1.6
+\end{bmatrix}
+\]
+
+---
+
+### **Paso 2: Segunda Iteración**
+Descomponemos \( A_1 \):
+
+\[
+Q_1 =
+\begin{bmatrix}
+0.98 & -0.2 \\
+0.2 & 0.98
+\end{bmatrix},
+\quad
+R_1 =
+\begin{bmatrix}
+3.47 & 0.28 \\
+0 & 1.52
+\end{bmatrix}
+\]
+
+\[
+A_2 = R_1 Q_1 =
+\begin{bmatrix}
+3.76 & 0.12 \\
+0.12 & 1.24
+\end{bmatrix}
+\]
+
+---
+
+### **Paso 3: Tercera Iteración**
+Repetimos con \( A_2 \):
+
+\[
+Q_2 =
+\begin{bmatrix}
+0.997 & -0.07 \\
+0.07 & 0.997
+\end{bmatrix},
+\quad
+R_2 =
+\begin{bmatrix}
+3.77 & 0.05 \\
+0 & 1.23
+\end{bmatrix}
+\]
+
+\[
+A_3 = R_2 Q_2 =
+\begin{bmatrix}
+3.92 & 0.02 \\
+0.02 & 1.08
+\end{bmatrix}
+\]
+
+---
+
+## **Conclusión**
+La matriz converge a una forma triangular superior:
+
+\[
+A_3 =
+\begin{bmatrix}
+3.92 & 0.02 \\
+0.02 & 1.08
+\end{bmatrix}
+\]
+
+Los valores propios aproximados son **3.92 y 1.08**, lo que concuerda con los valores propios exactos \( \lambda = 3, 1 \).
+
+---
+
+## 🔢 **Código en R**
+Aquí tienes el código en **R** para calcular los valores propios con el método QR:
+
+```{r}
+
+qr_eigenvalues <- function(A, iter=3){
+  for (i in 1:iter){
+    qr_decomp <- qr(A)  # Descomposición QR
+    Q <- qr.Q(qr_decomp)  # Matriz ortogonal Q
+    R <- qr.R(qr_decomp)  # Matriz triangular R
+    A <- R %*% Q  # Nueva matriz A_k+1
+    print(paste("Iteracion", i, ":"))
+    print(A)
+  }
+  return(diag(A))  # Valores propios aproximados
+}
+
+# Definimos la matriz A
+A <- matrix(c(2,1,1,2), nrow=2, byrow=TRUE)
+
+# Ejecutamos el método QR
+qr_eigenvalues(A, iter=10)
+
+
+
+#another example
+
+A <- matrix(c(3,2,3,4,5,6), nrow=2, byrow=TRUE)
+
+
+qr_decomp <- qr(A)  # Descomposición QR
+Q <- qr.Q(qr_decomp)  # Matriz ortogonal Q
+R <- qr.R(qr_decomp)  # Matriz triangular R
+
+```
