@@ -57,6 +57,11 @@ Draft class # 17
 
 https://trejoi.github.io/Numerical-Analysis-Class/Class_17_Metodo_de_Rayleigh.html
 
+Draft class # 18
+
+https://trejoi.github.io/Numerical-Analysis-Class/Class_18_Algoritmo_QR.html
+
+
 
    
    
