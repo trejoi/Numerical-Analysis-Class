@@ -61,6 +61,9 @@ Draft class # 18
 
 https://trejoi.github.io/Numerical-Analysis-Class/Class_18_Algoritmo_QR.html
 
+SVD factorization
+
+https://www.jeremykun.com/2016/04/18/singular-value-decomposition-part-1-perspectives-on-linear-algebra/
 
 
    
