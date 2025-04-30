@@ -1,0 +1,124 @@
+---
+title: "Capítulo 7. Diferenciación e Integración Numérica"
+author: "Imelda Trejo"
+date: "2025-04-29"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+En nuestro libro de clase, este tema se expone en el Capítulo 4. pag. 127
+
+https://heavyphysicsblog.wordpress.com/wp-content/uploads/2019/06/analisis-numerico-burden-faires-10ed.pdf
+
+
+## 7.0 Diferenciación Numérica: Introducción
+
+En muchos problemas aplicados, es necesario **aproximar numéricamente la derivada** de una función en un punto, por ejemplo, $\displaystyle f'(x_0)$.
+
+### Problema
+
+Queremos aproximar $\displaystyle f'(x_0)$ numéricamente. Recordemos que, por definición:
+
+$$
+\lim_{h \to 0} \frac{f(x_0 + h) - f(x_0)}{h}
+$$
+
+Una primera aproximación es usar un valor pequeño de $h$:
+
+$$
+f'(x_0) \approx \frac{f(x_0 + h) - f(x_0)}{h}
+$$
+
+### Preguntas clave
+
+- ¿Cuál es el error de estimación al usar esta fórmula?
+- ¿Qué valores de $h$ debemos usar para obtener una buena aproximación?
+
+Para responder estas preguntas, recurrimos por ejemplo, al **teorema de Taylor**. Si $f$ es al menos dos veces diferenciable, podemos escribir:
+
+$$
+f(x_0 + h) = f(x_0) + h f'(x_0) + \frac{h^2}{2} f''(\xi)
+$$
+
+para algún $\xi \in (x_0, x_0 + h)$.
+
+Restando $f(x_0)$ y dividiendo entre $h$:
+
+$$
+\frac{f(x_0 + h) - f(x_0)}{h} = f'(x_0) + \frac{h}{2} f''(\xi)
+$$
+Equivalentemente:
+
+$$
+f'(x_0)= \frac{f(x_0 + h) - f(x_0)}{h}  - \frac{h}{2} f''(\xi).
+$$
+Esta fórmula para aproximar la derivada de $f$ en $x_0$ se le conoce como **diferencia hacia adelante** si $h>0$ o 
+
+**diferencia hacia atrás** si $h<0$.  
+
+
+En ambos casos el **error de la aproximación es de orden $O(h)$, i.e., el error es lineal**.
+
+
+---
+
+A continuación, usaremos **interpolación de Lagrange** para deducir fórmulas de aproximación más generales a las derivadas, **basadas únicamente en puntos de interpolación conocidos**, y calcularemos sus respectivos errores.
+
+## 7.1 Diferenciación Numérica usando Interpolación de Lagrange
+
+La idea es construir un **polinomio interpolante $P(x)$** que aproxime a $f(x)$ en un conjunto de puntos $\{x_0, x_1, \dots, x_n\}$.
+
+Luego, derivamos el polinomio $P(x)$ y usamos:
+
+$$
+f'(x_0) \approx P'(x_0)
+$$
+
+### Ejemplo: Aproximación con dos puntos (diferencia hacia adelante)
+
+Usando $x_0$ y $x_1 = x_0 + h$:
+
+- Polinomio de interpolación de grado 1:
+
+$$
+P(x) = f(x_0) \cdot \frac{x - x_1}{x_0 - x_1} + f(x_1) \cdot \frac{x - x_0}{x_1 - x_0}
+$$
+
+- Derivando:
+
+$$
+P'(x_0) = \frac{f(x_1) - f(x_0)}{h}
+$$
+
+Este resultado coincide con la fórmula de diferencia hacia adelante.
+
+Fórmulas usando mayor puntos: ver libro de clase, pag 142 del pdf.
+
+
+https://heavyphysicsblog.wordpress.com/wp-content/uploads/2019/06/analisis-numerico-burden-faires-10ed.pdf
+
+
+### Error de la derivada del interpolante
+
+El error al aproximar la derivada también puede obtenerse a partir del teorema de error de interpolación. Para un polinomio de grado $n$, el error está dado por:
+
+$$
+f'(x_0) - P'(x_0) = \frac{f^{(n+1)}(\xi)}{(n+1)!} \cdot \frac{d}{dx} \left[ \prod_{i=0}^{n} (x - x_i) \right] \Bigg|_{x = x_0}
+$$
+
+donde $\xi \in [x_0, x_n]$.
+
+### Otras fórmulas útiles
+
+- Diferencia centrada
+- Fórmulas de mayor orden usando más puntos
+
+> En cada caso, se pueden deducir las fórmulas y errores correspondientes a partir del polinomio interpolante.
+
+---
+
+En la siguiente sección abordaremos la **integración numérica**, partiendo también de la idea de interpolación.
+
