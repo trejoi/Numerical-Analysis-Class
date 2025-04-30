@@ -67,8 +67,7 @@ https://www.jeremykun.com/2016/04/18/singular-value-decomposition-part-1-perspec
 
 https://www.bing.com/videos/riverview/relatedvideo?&q=svd+decomposition&&mid=0E2561CE834138562CBF0E2561CE834138562CBF&&FORM=VRDGAR
 
-https://www.bing.com/videos/riverview/relatedvideo?&q=svd+decomposition+stanford&&mid=4ABB5BB0BE3BADDEF3D34ABB5BB0BE3BADDEF3D3&mmscn=mtsc&aps=60&FORM=VRDGAR
-
+https://www.youtube.com/watch?v=JJoVs7kGcrM
 
    
    
