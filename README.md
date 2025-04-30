@@ -73,5 +73,10 @@ Draft class Numerical differentiation
 
 https://trejoi.github.io/Numerical-Analysis-Class/Capitulo_siete_uno_diferenciacionNumerica.html
 
+Draft class Numerical integration: Neuton-Cotes cuadrature 
+
+https://trejoi.github.io/Numerical-Analysis-Class/Capitulo_siete_dos_integrationNumerica.html
+
+
    
 
