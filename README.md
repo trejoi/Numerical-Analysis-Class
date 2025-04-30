@@ -69,6 +69,9 @@ https://www.bing.com/videos/riverview/relatedvideo?&q=svd+decomposition&&mid=0E2
 
 https://www.youtube.com/watch?v=JJoVs7kGcrM
 
-   
+Draft class Numerical differentiation 
+
+https://trejoi.github.io/Numerical-Analysis-Class/Capitulo_siete_uno_diferenciacionNumerica.html
+
    
 
