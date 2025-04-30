@@ -1,0 +1,168 @@
+---
+title: "Capítulo 7. Diferenciación e Integración Numérica"
+author: "Imelda Trejo"
+date: "2025-04-29"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+En nuestro libro de clase, este tema se expone en el Capítulo 4. pag. 154
+
+https://heavyphysicsblog.wordpress.com/wp-content/uploads/2019/06/analisis-numerico-burden-faires-10ed.pdf
+
+
+## 7.2 Integración Numérica
+
+El problema que queremos resolver es aproximar numéricamente la integral definida:
+
+$$
+\int_a^b f(x) \, dx
+$$
+
+Una forma básica de aproximar esta integral es usando una **suma ponderada (pesada) de valores de la función** en ciertos puntos $x_i$ del intervalo $[a, b]$:
+
+$$
+\int_a^b f(x) \, dx \approx \sum_{i=0}^{n} a_i f(x_i)
+$$
+
+Este tipo de aproximación se conoce como **cuadratura numérica**, los valores $\{x_i\}$ se llaman nodos de la integración o nodos de cuadratura y los valores $\{a_i\}$ se llaman pesos de la fórmula. 
+
+Nuevamente, estamos interesados en caracterizar el **error de truncamiento**, dado por:
+
+$$
+E(f) = \int_a^b f(x) \, dx - \sum_{i=0}^{n} a_i f(x_i).
+$$
+El **grado de precisión** de una fórmula de cuadratura es el número natural $n$ que verifica lo siguiente $$E(P_i)=0$$ para todo los polinomios $P_i(x)$ de grado $i\leq n$, y existe un polinomio $P_{n+1}(x)$ de grado $n+1$ tal qe $E(P_{i+1})\neq 0$
+
+
+
+---
+
+## 7.2.1 Cuadratura de Newton-Cotes
+
+Para este caso, la deducción de las fórmulas de cuadratura se hacen a partir de la interpolación polinomial.
+
+
+Recodemos que existe un único polinomio $P_n(x)$ de grado menor o igual a $n$ que pasa por los puntos distintos $\{(x_i,y_i))\}_{i=0}^{n}$.
+Cuando usamos estos puntos para aproximar a $f(x)$, de manera que $f(x_k)=y_k$, y luego aproximamos la integral de $f(x)$ por la interal de $P_n(x)$, la fórmula resultante se llama **fórmula de cuadratura de Newton-Cotes**. Si el primer nodo $x_0=a$ y el útlimo nodo $x_n=b$, entonces se dice que la fórmula de Newton-cotes es **cerrada**. 
+
+
+Recordemos que el polinomio de interpolación de Lagrange es:
+
+$$
+P_n(x) = \sum_{i=0}^{n} f(x_i) \cdot L_i(x)
+$$
+
+donde $L_i(x)$ es el $i$-ésimo polinomio base de Lagrange:
+
+$$
+L_i(x) = \prod_{\substack{j=0 \\ j \neq i}}^{n} \frac{x - x_j}{x_i - x_j}
+$$
+
+Entonces:
+
+$$
+\int_a^b f(x) \, dx \approx \int_a^b \left( \sum_{i=0}^{n} f(x_i) L_i(x) \right) dx = \sum_{i=0}^{n} f(x_i) \int_a^b L_i(x) \, dx
+$$
+
+Definimos los **coeficientes de cuadratura** como:
+
+$$
+a_i = \int_a^b L_i(x) \, dx
+$$
+
+Así obtenemos la **fórmula general de cuadratura**:
+
+$$
+\int_a^b f(x) \, dx \approx \sum_{i=0}^{n} a_i f(x_i)
+$$
+
+
+---
+
+## 7.2.3 Error de aproximación por interpolación
+
+La aproximación
+
+$$
+\int_a^b f(x) \, dx \approx \int_a^b P_n(x) \, dx
+$$
+
+introduce un **error**, dado por:
+
+$$
+E(f) = \int_a^b f(x) \, dx - \int_a^b P_n(x) \, dx
+$$
+
+Para estimar este error, usamos el **teorema del error de interpolación de Lagrange**. Si $f \in C^{n+1}[a,b]$, entonces para todo $x \in [a,b]$ se tiene:
+
+$$
+f(x) = P_n(x) + \frac{f^{(n+1)}(\xi_x)}{(n+1)!} \prod_{i=0}^{n} (x - x_i)
+$$
+
+para algún $\xi_x \in [a,b]$.
+
+Integrando ambos lados:
+
+$$
+\int_a^b f(x) \, dx = \int_a^b P_n(x) \, dx + \int_a^b \frac{f^{(n+1)}(\xi_x)}{(n+1)!} \prod_{i=0}^{n} (x - x_i) \, dx
+$$
+
+Entonces el **error de cuadratura** es:
+
+$$
+E(f) = \int_a^b \frac{f^{(n+1)}(\xi_x)}{(n+1)!} \prod_{i=0}^{n} (x - x_i) \, dx
+$$
+
+> Esta expresión muestra que el error depende del comportamiento de la derivada $(n+1)$-ésima de $f$ y del producto
+de los términos $(x - x_i)$, que están determinados por los nodos de interpolación.
+
+
+---
+
+## 7.2.4 Métodos clásicos de cuadratura
+
+Ver el libro de clase para revizar varios métodos particulares que se obtienen al elegir diferentes nodos y grados del polinomio interpolante:
+
+- **Regla del trapecio (fórmula de Newton-Cotes cerrada con $x_0=a$, $x_1=b$, pag 154 del pdf):**
+
+\[
+\int_{a}^{b} f(x) \, dx = \frac{b-a}{2} \left[ f(a) + f(b) \right] -\frac{h^3}{12} f(\xi), \quad \text{donde } x_0 < \xi < x_1..
+\]
+
+Dado, que el polinomio de Lagrage con nodos  $x_0=a$, $x_1=b$ es lineal, la presición del método del trapecio es uno. 
+
+
+- **Regla compuesta del trapecio:**
+
+\[
+\int_a^b f(x)\,dx = \frac{h}{2} \left[ f(a) + 2 \sum_{j=1}^{n-1} f(x_j) + f(b) \right] - \frac{(b - a)}{12} h^2 f(\xi),
+\quad \text{donde } a < \xi < b,
+\]
+
+\(x_i = a + ih\), \(i = 0, 1, \ldots, n\), son  \(n\) subintervalos de ancho \(h = \frac{b-a}{n}\).
+
+
+
+- Regla de Simpson: pag 157
+
+
+- Cuadraturas compuestas: Simpson, teorema 4.4, pag 164 del pdf.
+
+
+Cada uno de estos métodos puede deducirse a partir de la fórmula general de cuadratura basada en interpolación, y se puede analizar  finamente sus respectivos **errores de aproximación**.
+
+https://heavyphysicsblog.wordpress.com/wp-content/uploads/2019/06/analisis-numerico-burden-faires-10ed.pdf
+
+> Estos métodos permiten resolver integrales definidas cuando $f(x)$ no tiene una primitiva conocida, o cuando solo se tienen datos discretos de $f(x)$.
+
+
+> **Nota histórica: ¿Por qué se usa el término cuadratura"?**
+>
+> El término *cuadratura* proviene de la matemática clásica, donde se refería al problema de **encontrar un cuadrado con la misma área que una figura dada** (por ejemplo, un círculo). Este problema, conocido como *la cuadratura del círculo*, fue uno de los grandes desafíos de la geometría griega.
+>
+> En el contexto moderno, **cuadratura numérica** se refiere a cualquier método que **aproxima el valor de una integral definida**, es decir, que estima el área bajo la gráfica de una función. Por tanto, el nombre mantiene su sentido original: calcular (aproximadamente) un área.
+
