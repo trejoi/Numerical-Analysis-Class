@@ -75,7 +75,7 @@ https://trejoi.github.io/Numerical-Analysis-Class/Capitulo_siete_uno_diferenciac
 
 Draft class Numerical integration: Newton-Cotes cuadrature 
 
-https://trejoi.github.io/Numerical-Analysis-Class/Capitulo_siete_dos_integrationNumerica.html
+https://trejoi.github.io/Numerical-Analysis-Class/Capitulo_siete_dos_integracionNumerica.html
 
 
    
